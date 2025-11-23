@@ -1,0 +1,1 @@
+// generar ids únicos de forma reutilizable
