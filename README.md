@@ -11,6 +11,11 @@ node server/server.js
 ```
 The server listens on port by default. `8080`
 
+Open it in your browser
+```sh
+localhost:8080/
+```
+
 ---
 
 ### Status
