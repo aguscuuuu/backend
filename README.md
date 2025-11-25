@@ -1,15 +1,15 @@
-# Backend Project
+# Backend I - Coderhouse
 
-Proyecto de ejemplo que expone una API REST para administrar productos y carritos usando archivos JSON como persistencia. 
+Backend REST API project that manages products and shopping carts using JSON files for persistence. Ideal for learning or simple prototyping.
 
 ---
 
-### Ejecutar
-Arrancar el servidor:
+### Run
+Run the following code from the command line in the root folder.
 ```sh
 node server/server.js
 ```
-El servidor escucha por defecto en el puerto `8080`.
+The server listens on port by default. `8080`
 
 ---
 
