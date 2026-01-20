@@ -1,7 +1,10 @@
 import app from "./src/app.js";
+import { initMongoDB } from "./src/config/connection.js";
 
-const PORT = 8080;
+const PORT = 8080; 
+
+initMongoDB(); 
 
 app.listen(PORT, () => {
-    console.log(`Servidor funcionando en puerto ${PORT}...\nlocalhost:${PORT}/`);
+    console.log(`Servidor conectado exitosamente.\nRuta: localhost:${PORT}/`);
 });

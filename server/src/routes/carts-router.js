@@ -1,45 +1,31 @@
 import { Router } from "express";
-import { cartManager } from "../managers/cart-manager.js";
+import {
+    getAllCarts,
+    getCartById,
+    createCart,
+    addProductToCart,
+    removeProductFromCart,
+    clearCart
+} from "../controllers/cart-controller.js";
 
 const router = Router(); // se crea una instancia de router para definir rutas
 
-//* ruta http que crea un carrito vacío -----------------------------------------------------------------------------------------------
-router.post("/", async(req, res) => {
-    try{
-        const newCart = await cartManager.create();
-        res.status(201).json(newCart);
-    }catch(error){
-        res.status(500).send(error.message);
-    }
-});
-//* ruta http que devuelve un carrito por id ------------------------------------------------------------------------------------------
-router.get("/:cid", async(req, res) => {
-    try{
-        const { cid } = req.params;
-        const cart = await cartManager.getOne(cid);
-        res.json(cart);
-    }catch(error){
-        res.status(404).send(error.message);
-    }
-});
-//* ruta http que agrega un producto a un carrito -------------------------------------------------------------------------------------
-router.post("/:cid/product/:pid", async(req, res) => {
-    try{
-        const { cid , pid } = req.params;
-        const result = await cartManager.addProdToCart(cid, pid);
-        res.json(result);
-    }catch(error){
-        res.status(400).send(error.message);
-    }
-});
-//* ruta http para listar todos los carritos ------------------------------------------------------------------------------------------
-router.get("/", async (req, res) => {
-    try {
-        const carts = await cartManager.getAll();
-        res.json(carts);
-    } catch (error) {
-        res.status(404).send(error.message);
-    }
-});
+//* ruta http que obtiene todos los carritos ------------------------------------------------------------------------------------------
+router.get("/", getAllCarts);
+
+//* ruta http que crea un carrito nuevo -----------------------------------------------------------------------------------------------
+router.post("/", createCart);
+
+//* ruta http que obtiene un carrito por su id ----------------------------------------------------------------------------------------
+router.get("/:cid", getCartById);
+
+//* ruta http que agrega un producto al carrito ---------------------------------------------------------------------------------------
+router.post("/:cid/product/:pid", addProductToCart);
+
+//* ruta http que elimina un producto del carrito -------------------------------------------------------------------------------------
+router.delete("/:cid/product/:pid", removeProductFromCart);
+
+//* ruta http que vacía el carrito ----------------------------------------------------------------------------------------------------
+router.delete("/:cid", clearCart);
 
 export { router };
