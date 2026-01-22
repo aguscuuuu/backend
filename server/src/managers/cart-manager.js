@@ -7,7 +7,6 @@ class CartManager {
     getAll = async () => {
         try {
             const carts = await CartModel.find().populate('products.product');
-            // populate trae los datos completos del producto en vez de solo el id
             return carts;
         } catch (error) {
             throw new Error(error);
@@ -71,7 +70,7 @@ class CartManager {
         }
     }
 
-    //* elimina un producto del carrito (método extra útil)
+    //* elimina un producto del carrito
     removeProdFromCart = async (cartId, productId) => {
         try {
             const cart = await CartModel.findById(cartId);
@@ -88,7 +87,7 @@ class CartManager {
         }
     }
 
-    //* vacía el carrito (método extra útil)
+    //* vacía el carrito
     clearCart = async (cartId) => {
         try {
             const cart = await CartModel.findByIdAndUpdate(

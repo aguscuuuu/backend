@@ -1,7 +1,7 @@
 import { productManager } from "../managers/product-manager.js";
 import { cartManager } from "../managers/cart-manager.js";
 
-// Vista de productos con paginación
+//* vista de productos con paginación
 export const getProductsView = async (req, res) => {
     try {
         const result = await productManager.getAll(req.query);
@@ -17,11 +17,11 @@ export const getProductsView = async (req, res) => {
             nextLink: result.nextLink
         });
     } catch (error) {
-        res.status(500).send('Error al cargar productos');
+        res.status(500).send('Error al cargar productos.');
     }
 };
 
-// Vista de detalle de producto
+//* vista de detalle de producto
 export const getProductDetailView = async (req, res) => {
     try {
         const { pid } = req.params;
@@ -29,30 +29,30 @@ export const getProductDetailView = async (req, res) => {
         
         res.render('productDetail', {
             title: product.title,
-            product: product.toObject() // ← CAMBIO AQUÍ: Convierte a objeto plano
+            product: product.toObject() 
         });
     } catch (error) {
-        res.status(404).send('Producto no encontrado');
+        res.status(404).send('Producto no encontrado.');
     }
 };
 
-// Vista del carrito
+//* vista del carrito
 export const getCartView = async (req, res) => {
     try {
         const { cid } = req.params;
         const cart = await cartManager.getOne(cid);
         
-        // Calcular total
+        // calcular total
         const total = cart.products.reduce((sum, item) => {
             return sum + (item.product.price * item.quantity);
         }, 0);
         
         res.render('cart', {
             title: 'Mi Carrito',
-            cart: cart.toObject(), // ← CAMBIO AQUÍ
+            cart: cart.toObject(), 
             total
         });
     } catch (error) {
-        res.status(404).send('Carrito no encontrado');
+        res.status(404).send('Carrito no encontrado.');
     }
 };

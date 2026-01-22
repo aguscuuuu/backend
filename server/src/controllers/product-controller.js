@@ -1,6 +1,6 @@
 import { productManager } from "../managers/product-manager.js";
 
-// obtener todos los productos
+//* obtener todos los productos
 export const getAllProducts = async (req, res) => {
     try {
         // pasar los query params al manager
@@ -14,7 +14,7 @@ export const getAllProducts = async (req, res) => {
     }
 };
 
-// obtener un producto por id
+//* obtener un producto por id
 export const getProductById = async (req, res) => {
     try {
         const { pid } = req.params;
@@ -31,13 +31,13 @@ export const getProductById = async (req, res) => {
     }
 };
 
-// crear un producto
+//* crear un producto
 export const createProduct = async (req, res) => {
     try {
         const product = await productManager.create(req.body);
         res.status(201).json({
             status: "success",
-            message: "Producto creado exitosamente",
+            message: "Producto creado exitosamente.",
             data: product
         });
     } catch (error) {
@@ -48,14 +48,14 @@ export const createProduct = async (req, res) => {
     }
 };
 
-// actualizar un producto
+//* actualizar un producto
 export const updateProduct = async (req, res) => {
     try {
         const { pid } = req.params;
         const updatedProduct = await productManager.update(req.body, pid);
         res.status(200).json({
             status: "success",
-            message: "Producto actualizado exitosamente",
+            message: "Producto actualizado exitosamente.",
             data: updatedProduct
         });
     } catch (error) {
@@ -66,7 +66,7 @@ export const updateProduct = async (req, res) => {
     }
 };
 
-// eliminar un producto
+//* eliminar un producto
 export const deleteProduct = async (req, res) => {
     try {
         const { pid } = req.params;

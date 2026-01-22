@@ -1,4 +1,73 @@
 <nav>
     <a href="/products">🏠 Productos</a>
-    <a href="/carts/{{cartId}}">🛒 Mi Carrito</a>
+    <a href="#" onclick="goToCart(); return false;">🛒 Mi Carrito <span id="cartCount"></span></a>
 </nav>
+
+<script>
+    // Inicializar carrito al cargar la página
+    window.addEventListener('DOMContentLoaded', async () => {
+        await ensureCartExists();
+    });
+
+    // Asegurar que existe un carrito
+    async function ensureCartExists() {
+        let cartId = localStorage.getItem('cartId');
+        
+        // Verificar si el carrito existe en la bd
+        if (cartId) {
+            try {
+                const response = await fetch(`/api/carts/${cartId}`);
+                if (!response.ok) {
+                    // el carrito no existe, crear uno nuevo
+                    cartId = null;
+                    localStorage.removeItem('cartId');
+                }
+            } catch (error) {
+                cartId = null;
+                localStorage.removeItem('cartId');
+            }
+        }
+        
+        // si no hay carrito válido, crear uno nuevo
+        if (!cartId) {
+            try {
+                const response = await fetch('/api/carts', { method: 'POST' });
+                const data = await response.json();
+                cartId = data.data._id;
+                localStorage.setItem('cartId', cartId);
+            } catch (error) {
+                console.error('Error al crear carrito: ', error);
+            }
+        }
+        
+        return cartId;
+    }
+
+    // ir al carrito
+    async function goToCart() {
+        const cartId = await ensureCartExists();
+        if (cartId) {
+            window.location.href = `/carts/${cartId}`;
+        }
+    }
+
+    // función global para agregar al carrito (usada en products.handlebars)
+    window.addToCartGlobal = async function(productId) {
+        const cartId = await ensureCartExists();
+        
+        try {
+            const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
+                method: 'POST'
+            });
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                alert('✅ Producto agregado al carrito.');
+            } else {
+                alert('❌ Error: ' + data.message);
+            }
+        } catch (error) {
+            alert('❌ Error al agregar al carrito.');
+        }
+    };
+</script>

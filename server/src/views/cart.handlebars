@@ -4,7 +4,6 @@
 
 {{#if cart.products.length}}
 <div style="margin-bottom: 30px;">
-    <!-- Tabla de productos -->
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
         <thead>
             <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
@@ -50,7 +49,6 @@
         </tbody>
     </table>
 
-    <!-- Resumen del carrito -->
     <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; max-width: 400px; margin-left: auto;">
         <h3 style="margin-bottom: 20px; color: #333;">Resumen del pedido</h3>
         <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #dee2e6;">
@@ -66,7 +64,6 @@
         </button>
     </div>
 
-    <!-- Botón para vaciar carrito -->
     <div style="margin-top: 20px; text-align: right;">
         <button onclick="clearCart()" class="btn btn-secondary">
             🗑️ Vaciar carrito
@@ -100,13 +97,16 @@
                 body: JSON.stringify({ quantity: newQuantity })
             });
             
-            if (response.ok) {
+            const data = await response.json();
+            
+            if (data.status === 'success') {
                 location.reload();
             } else {
-                alert('❌ Error al actualizar cantidad');
+                alert('❌ Error: ' + data.message);
             }
         } catch (error) {
-            alert('❌ Error al actualizar cantidad');
+            console.error('Error:', error);
+            alert('❌ Error al actualizar cantidad.');
         }
     }
 
@@ -121,10 +121,10 @@
             if (response.ok) {
                 location.reload();
             } else {
-                alert('❌ Error al eliminar producto');
+                alert('❌ Error al eliminar producto.');
             }
         } catch (error) {
-            alert('❌ Error al eliminar producto');
+            alert('❌ Error al eliminar producto.');
         }
     }
 
@@ -139,10 +139,10 @@
             if (response.ok) {
                 location.reload();
             } else {
-                alert('❌ Error al vaciar carrito');
+                alert('❌ Error al vaciar carrito.');
             }
         } catch (error) {
-            alert('❌ Error al vaciar carrito');
+            alert('❌ Error al vaciar carrito.');
         }
     }
 </script>

@@ -1,6 +1,5 @@
 <h1>Catálogo de Productos</h1>
 
-<!-- Filtros y ordenamiento -->
 <div style="margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap;">
     <div>
         <label style="margin-right: 8px;">Categoría:</label>
@@ -36,12 +35,11 @@
     <button onclick="applyFilters()" class="btn">Aplicar filtros</button>
 </div>
 
-<!-- Grid de productos -->
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
     {{#each products}}
     <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; transition: transform 0.3s, box-shadow 0.3s;" 
-         onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)';" 
-         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+        onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)';" 
+        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
         
         <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">{{this.title}}</h3>
         <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px; min-height: 60px;">{{this.description}}</p>
@@ -66,7 +64,6 @@
     {{/each}}
 </div>
 
-<!-- Paginación -->
 <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 30px;">
     {{#if hasPrevPage}}
         <a href="{{prevLink}}" class="btn">← Anterior</a>
@@ -84,7 +81,6 @@
 </div>
 
 <script>
-    // Obtener el cartId (en un caso real vendría de la sesión/cookie)
     const cartId = localStorage.getItem('cartId') || createCart();
 
     async function createCart() {
@@ -96,20 +92,21 @@
     }
 
     async function addToCart(productId) {
-        try {
-            const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
-                method: 'POST'
-            });
-            const data = await response.json();
-            
-            if (data.status === 'success') {
-                alert('✅ Producto agregado al carrito');
-            } else {
-                alert('❌ Error: ' + data.message);
-            }
-        } catch (error) {
-            alert('❌ Error al agregar al carrito');
-        }
+        await window.addToCartGlobal(productId);
+    }
+
+    function applyFilters() {
+        const category = document.getElementById('categoryFilter').value;
+        const sort = document.getElementById('sortFilter').value;
+        const availability = document.getElementById('availabilityFilter').value;
+
+        let url = '/products?';
+        
+        if (category) url += `query=${category}&`;
+        if (availability) url += `query=${availability}&`;
+        if (sort) url += `sort=${sort}&`;
+
+        window.location.href = url;
     }
 
     function applyFilters() {

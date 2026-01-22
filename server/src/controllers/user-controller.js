@@ -1,6 +1,6 @@
 import { userManager } from "../managers/user-manager.js";
 
-// obtener todos los usuarios
+//* obtener todos los usuarios
 export const getAllUsers = async (req, res) => {
     try {
         const users = await userManager.getUsers();
@@ -16,7 +16,7 @@ export const getAllUsers = async (req, res) => {
     }
 };
 
-// obtener un usuario por id
+//* obtener un usuario por id
 export const getUserById = async (req, res) => {
     try {
         const { uid } = req.params;
@@ -33,13 +33,13 @@ export const getUserById = async (req, res) => {
     }
 };
 
-// registrar un nuevo usuario
+//* registrar un nuevo usuario
 export const registerUser = async (req, res) => {
     try {
         const user = await userManager.register(req.body);
         res.status(201).json({
         status: "success",
-        message: "Usuario registrado exitosamente",
+        message: "Usuario registrado exitosamente.",
         data: user
         });
     } catch (error) {
@@ -50,7 +50,7 @@ export const registerUser = async (req, res) => {
     }
 };
 
-// login de usuario
+//* login de usuario
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -58,7 +58,7 @@ export const loginUser = async (req, res) => {
         if (!email || !password) {
         return res.status(400).json({
             status: "error",
-            message: "Email y contraseña son requeridos"
+            message: "Email y contraseña son requeridos."
         });
         }
 
@@ -66,7 +66,7 @@ export const loginUser = async (req, res) => {
     
         res.status(200).json({
             status: "success",
-            message: "Login exitoso",
+            message: "Login exitoso.",
             data: user
             // token: token
             });
@@ -78,14 +78,14 @@ export const loginUser = async (req, res) => {
     }
 };
 
-// Actualizar un usuario
+//* actualizar un usuario
 export const updateUser = async (req, res) => {
     try {
         const { uid } = req.params;
         const updatedUser = await userManager.update(uid, req.body);
         res.status(200).json({
         status: "success",
-        message: "Usuario actualizado exitosamente",
+        message: "Usuario actualizado exitosamente.",
         data: updatedUser
         });
     } catch (error) {
@@ -96,7 +96,7 @@ export const updateUser = async (req, res) => {
     }
 };
 
-// Eliminar un usuario
+//* eliminar un usuario
 export const deleteUser = async (req, res) => {
     try {
         const { uid } = req.params;

@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Configurar Handlebars (versión simple sin runtimeOptions)
+// configurar Handlebars (versión simple sin runtimeOptions)
 app.engine("handlebars", handlebars.engine({
     helpers: {
         multiply: (a, b) => a * b
@@ -22,12 +22,12 @@ app.engine("handlebars", handlebars.engine({
 app.set("view engine", "handlebars");
 app.set("views", "./server/src/views");
 
-// Rutas API
+// rutas api
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/users", usersRouter);
 
-// Rutas de vistas
+// rutas de vistas
 app.use("/", viewsRouter);
 
 app.get("/", (req, res) => res.redirect('/products'));

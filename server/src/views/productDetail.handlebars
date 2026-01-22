@@ -4,12 +4,11 @@
     <h1 style="margin-bottom: 30px;">{{product.title}}</h1>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-        <!-- Imagen del producto (placeholder) -->
+
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 400px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
             🖼️
         </div>
 
-        <!-- Detalles del producto -->
         <div>
             <h2 style="color: #333; margin-bottom: 20px; font-size: 2rem;">${{product.price}}</h2>
 
@@ -25,18 +24,18 @@
 
             <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
                 <p style="margin-bottom: 10px;"><strong>Categoría:</strong> {{product.category}}</p>
-                <p style="margin-bottom: 10px;"><strong>Stock disponible:</strong> {{product.stock}} unidades</p>
+                <p style="margin-bottom: 10px;"><strong>Stock:</strong> {{product.stock}} unidades</p>
                 <p><strong>Estado:</strong> {{#if product.status}}Activo{{else}}Inactivo{{/if}}</p>
             </div>
 
             {{#if product.status}}
-            <div style="display: flex; gap: 10px;">
-                <input type="number" id="quantity" value="1" min="1" max="{{product.stock}}" 
-                       style="width: 80px; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;">
-                <button onclick="addToCart('{{product._id}}')" class="btn" style="flex: 1; font-size: 1.1rem;">
-                    🛒 Agregar al carrito
-                </button>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <label style="font-weight: bold;">Cantidad:</label>
+                <input type="number" id="quantity" value="1" min="1" max="{{product.stock}}" style="width: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;">
             </div>
+            <button onclick="addToCart('{{product._id}}')" class="btn" style="width: 100%; font-size: 1.1rem;">
+                🛒 Agregar al carrito
+            </button>
             {{else}}
             <button class="btn" disabled style="opacity: 0.5; cursor: not-allowed; width: 100%;">
                 Producto no disponible
@@ -47,21 +46,22 @@
 </div>
 
 <script>
-    const cartId = localStorage.getItem('cartId') || createCart();
-
-    async function createCart() {
-        const response = await fetch('/api/carts', { method: 'POST' });
-        const data = await response.json();
-        const newCartId = data.data._id;
-        localStorage.setItem('cartId', newCartId);
-        return newCartId;
-    }
-
     async function addToCart(productId) {
-        const quantity = document.getElementById('quantity').value;
+        const quantity = parseInt(document.getElementById('quantity').value);
         
+        if (!quantity || quantity < 1) {
+            alert('❌ Cantidad inválida');
+            return;
+        }
+
+        const cartId = localStorage.getItem('cartId');
+        if (!cartId) {
+            alert('❌ No hay carrito disponible');
+            return;
+        }
+
         try {
-            // Agregar producto al carrito (la cantidad se suma en el backend)
+            // Agregar productos uno por uno (el backend suma automáticamente)
             for (let i = 0; i < quantity; i++) {
                 await fetch(`/api/carts/${cartId}/product/${productId}`, {
                     method: 'POST'
@@ -70,6 +70,7 @@
             
             alert(`✅ ${quantity} producto(s) agregado(s) al carrito`);
         } catch (error) {
+            console.error('Error:', error);
             alert('❌ Error al agregar al carrito');
         }
     }

@@ -18,7 +18,7 @@ class UserManager {
     getById = async (id) => {
         try {
             const user = await UserModel.findById(id).select('-password');
-            if (!user) throw new Error("User not found");
+            if (!user) throw new Error("Usuario no encontrado.");
             return user;
         } catch (error) {
             throw new Error(error);
@@ -29,7 +29,7 @@ class UserManager {
     getByEmail = async (email) => {
         try {
             const user = await UserModel.findOne({ email });
-            return user; // Devuelve null si no existe
+            return user; // devuelve null si no existe
         } catch (error) {
             throw new Error(error);
         }
@@ -39,13 +39,13 @@ class UserManager {
     register = async (obj) => {
         try {
             if (!obj.email || !obj.password) {
-                throw new Error("Email and password are required");
+                throw new Error("Email y contraseña son requeridos.");
             }
 
             // verifica si el email ya existe
             const existingUser = await UserModel.findOne({ email: obj.email });
             if (existingUser) {
-                throw new Error("Email already registered");
+                throw new Error("Email ya registrado.");
             }
 
             // hashea la contraseña
@@ -74,11 +74,11 @@ class UserManager {
         try {
             // busca el usuario por email
             const user = await UserModel.findOne({ email });
-            if (!user) throw new Error("Invalid credentials");
+            if (!user) throw new Error("Credenciales inválidas.");
 
             // compara la contraseña
             const isValidPass = await bcrypt.compare(password, user.password);
-            if (!isValidPass) throw new Error("Invalid credentials");
+            if (!isValidPass) throw new Error("Credenciales inválidas");
 
             // devuelve datos del usuario sin la contraseña
             return {
@@ -107,7 +107,7 @@ class UserManager {
                 { new: true, runValidators: true }
             ).select('-password');
 
-            if (!updatedUser) throw new Error("User not found");
+            if (!updatedUser) throw new Error("Usuario no encontrado.");
             return updatedUser;
         } catch (error) {
             throw new Error(error);
@@ -118,8 +118,8 @@ class UserManager {
     delete = async (id) => {
         try {
             const user = await UserModel.findByIdAndDelete(id);
-            if (!user) throw new Error("User not found");
-            return `Usuario ${user.email} eliminado`;
+            if (!user) throw new Error("Usuario no encontrado.");
+            return `Usuario ${user.email} eliminado.`;
         } catch (error) {
             throw new Error(error);
         }
