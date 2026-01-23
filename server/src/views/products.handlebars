@@ -1,9 +1,9 @@
-<h1>Catálogo de Productos</h1>
+<h1>Catálogo de productos</h1>
 
 <div style="margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap;">
     <div>
         <label style="margin-right: 8px;">Categoría:</label>
-        <select id="categoryFilter" style="padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+        <select id="categoryFilter" style="padding: 8px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; font-size: 14px">
             <option value="">Todas</option>
             <option value="Periféricos">Periféricos</option>
             <option value="Monitores">Monitores</option>
@@ -16,7 +16,7 @@
 
     <div>
         <label style="margin-right: 8px;">Ordenar por precio:</label>
-        <select id="sortFilter" style="padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+        <select id="sortFilter" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; cursor: pointer; font-size: 14px">
             <option value="">Sin orden</option>
             <option value="asc">Menor a mayor</option>
             <option value="desc">Mayor a menor</option>
@@ -25,7 +25,7 @@
 
     <div>
         <label style="margin-right: 8px;">Disponibilidad:</label>
-        <select id="availabilityFilter" style="padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+        <select id="availabilityFilter" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; cursor: pointer; font-size: 14px">
             <option value="">Todos</option>
             <option value="available">Disponibles</option>
             <option value="unavailable">No disponibles</option>
@@ -37,27 +37,27 @@
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
     {{#each products}}
-    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; transition: transform 0.3s, box-shadow 0.3s;" 
-        onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)';" 
-        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+    <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px" 
+        onmouseover="this.style.boxShadow='none';" 
+        onmouseout="this.style.boxShadow='none';">
         
         <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">{{this.title}}</h3>
         <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px; min-height: 60px;">{{this.description}}</p>
         
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <span style="font-size: 1.5rem; font-weight: bold; color: #667eea;">${{this.price}}</span>
-            <span style="background: {{#if this.status}}#28a745{{else}}#dc3545{{/if}}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem;">
+            <span style="font-size: 1.5rem; font-weight: 600; color: #0f4881;">${{this.price}}</span>
+            <span style="background: {{#if this.status}}#28a745{{else}}#dc3545{{/if}}; color: white; padding: 4px 12px; border-radius: 5px; font-size: 0.75rem; font-weight: 600">
                 {{#if this.status}}Disponible{{else}}Agotado{{/if}}
             </span>
         </div>
 
-        <p style="color: #888; font-size: 0.85rem; margin-bottom: 10px;">Stock: {{this.stock}}</p>
-        <p style="color: #888; font-size: 0.85rem; margin-bottom: 15px;">Categoría: {{this.category}}</p>
+        <p style="color: black; font-size: 0.85rem; margin-bottom: 10px;">Stock: {{this.stock}}</p>
+        <p style="color: black; font-size: 0.85rem; margin-bottom: 15px;">Categoría: {{this.category}}</p>
 
         <div style="display: flex; gap: 10px;">
             <a href="/products/{{this._id}}" class="btn" style="flex: 1; text-align: center;">Ver detalle</a>
             <button onclick="addToCart('{{this._id}}')" class="btn btn-secondary" style="flex: 1;">
-                🛒 Agregar
+                Agregar uno
             </button>
         </div>
     </div>
@@ -71,7 +71,7 @@
         <button class="btn" disabled style="opacity: 0.5; cursor: not-allowed;">← Anterior</button>
     {{/if}}
 
-    <span style="font-weight: bold; color: #333;">Página {{page}} de {{totalPages}}</span>
+    <span style="font-weight: 400; color: #333;">{{page}} / {{totalPages}}</span>
 
     {{#if hasNextPage}}
         <a href="{{nextLink}}" class="btn">Siguiente →</a>

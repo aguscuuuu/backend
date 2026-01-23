@@ -1,19 +1,20 @@
 <nav>
-    <a href="/products">🏠 Productos</a>
-    <a href="#" onclick="goToCart(); return false;">🛒 Mi Carrito <span id="cartCount"></span></a>
+    <h2 style="color: white; font-size: 40px; margin-right: 60px">Vertex</h2>
+    <a href="/products">Productos</a>
+    <a href="#" onclick="goToCart(); return false;">Carrito<span id="cartCount"></span></a>
 </nav>
 
 <script>
-    // Inicializar carrito al cargar la página
+    // inicializar carrito al cargar la página
     window.addEventListener('DOMContentLoaded', async () => {
         await ensureCartExists();
     });
 
-    // Asegurar que existe un carrito
+    // asegurar que existe un carrito
     async function ensureCartExists() {
         let cartId = localStorage.getItem('cartId');
         
-        // Verificar si el carrito existe en la bd
+        // verificar si el carrito existe en la bd
         if (cartId) {
             try {
                 const response = await fetch(`/api/carts/${cartId}`);
