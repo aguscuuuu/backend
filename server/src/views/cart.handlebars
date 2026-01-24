@@ -1,4 +1,4 @@
-<a href="/products" style="display: inline-block; margin-bottom: 20px; color: #0b3866; text-decoration: none; font-weight: 500">← Seguir comprando</a>
+<a href="/products" style="display: inline-block; margin-bottom: 20px; color: #0c3967; text-decoration: none; font-weight: 400">< Seguir comprando</a>
 
 <h1>Mi Carrito</h1>
 
@@ -23,7 +23,7 @@
                         <p style="color: #888; font-size: 0.9rem; margin: 0;">{{this.product.category}}</p>
                     </div>
                 </td>
-                <td style="padding: 15px; text-align: center; font-weight: bold; color: #667eea;">
+                <td style="padding: 15px; text-align: center; font-weight: bold; color: #0c3967;">
                     ${{this.product.price}}
                 </td>
                 <td style="padding: 15px; text-align: center;">
@@ -40,8 +40,8 @@
                 </td>
                 <td style="padding: 15px; text-align: center;">
                     <button onclick="removeFromCart('{{this.product._id}}')" 
-                            style="background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">
-                        🗑️ Eliminar
+                            style="background-color: white;color: #888; border: none; padding: 0px; border-radius: 6px; cursor: pointer; font-size: 15px">
+                        ✖
                     </button>
                 </td>
             </tr>
@@ -49,15 +49,15 @@
         </tbody>
     </table>
 
-    <div style="background: #f8f9fa; padding: 25px; border-radius: 5px; max-width: 400px; margin-left: auto;">
+    <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; max-width: 400px; margin-left: auto;">
         <h3 style="margin-bottom: 20px; color: #333;">Resumen del pedido</h3>
         <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #dee2e6;">
             <span>Subtotal:</span>
-            <span style="font-weight: bold;">${{total}}</span>
+            <span style="font-weight: bold;">{{total}}</span>
         </div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.3rem;">
             <strong>Total:</strong>
-            <strong style="color: #667eea;">${{total}}</strong>
+            <strong style="color: #0c3967;">{{total}}</strong>
         </div>
         <button class="btn" style="width: 100%; padding: 15px; font-size: 1.1rem;">
             🛒 Finalizar compra
@@ -105,8 +105,7 @@
                 alert('❌ Error: ' + data.message);
             }
         } catch (error) {
-            console.error('Error:', error);
-            alert('❌ Error al actualizar cantidad.');
+            alert('❌ Error al actualizar cantidad');
         }
     }
 
@@ -121,10 +120,10 @@
             if (response.ok) {
                 location.reload();
             } else {
-                alert('❌ Error al eliminar producto.');
+                alert('❌ Error al eliminar producto');
             }
         } catch (error) {
-            alert('❌ Error al eliminar producto.');
+            alert('❌ Error al eliminar producto');
         }
     }
 
@@ -139,10 +138,10 @@
             if (response.ok) {
                 location.reload();
             } else {
-                alert('❌ Error al vaciar carrito.');
+                alert('❌ Error al vaciar carrito');
             }
         } catch (error) {
-            alert('❌ Error al vaciar carrito.');
+            alert('❌ Error al vaciar carrito');
         }
     }
 </script>

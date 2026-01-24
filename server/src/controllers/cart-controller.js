@@ -5,13 +5,13 @@ export const getAllCarts = async (req, res) => {
     try {
         const carts = await cartManager.getAll();
         res.status(200).json({
-        status: "success",
-        data: carts
+            status: "success",
+            data: carts
         });
     } catch (error) {
         res.status(500).json({
-        status: "error",
-        message: error.message
+            status: "error",
+            message: error.message
         });
     }
 };
@@ -22,13 +22,13 @@ export const getCartById = async (req, res) => {
         const { cid } = req.params;
         const cart = await cartManager.getOne(cid);
         res.status(200).json({
-        status: "success",
-        data: cart
+            status: "success",
+            data: cart
         });
     } catch (error) {
         res.status(404).json({
-        status: "error",
-        message: error.message
+            status: "error",
+            message: error.message
         });
     }
 };
@@ -38,14 +38,14 @@ export const createCart = async (req, res) => {
     try {
         const cart = await cartManager.create();
         res.status(201).json({
-        status: "success",
-        message: "Carrito creado exitosamente.",
-        data: cart
+            status: "success",
+            message: "Carrito creado exitosamente.",
+            data: cart
         });
     } catch (error) {
         res.status(500).json({
-        status: "error",
-        message: error.message
+            status: "error",
+            message: error.message
         });
     }
 };
@@ -56,14 +56,14 @@ export const addProductToCart = async (req, res) => {
         const { cid, pid } = req.params;
         const cart = await cartManager.addProdToCart(cid, pid);
         res.status(200).json({
-        status: "success",
-        message: "Producto agregado al carrito.",
-        data: cart
+            status: "success",
+            message: "Producto agregado al carrito.",
+            data: cart
         });
     } catch (error) {
         res.status(400).json({
-        status: "error",
-        message: error.message
+            status: "error",
+            message: error.message
         });
     }
 };
@@ -74,14 +74,14 @@ export const removeProductFromCart = async (req, res) => {
         const { cid, pid } = req.params;
         const cart = await cartManager.removeProdFromCart(cid, pid);
         res.status(200).json({
-        status: "success",
-        message: "Producto eliminado del carrito.",
-        data: cart
+            status: "success",
+            message: "Producto eliminado del carrito.",
+            data: cart
         });
     } catch (error) {
         res.status(400).json({
-        status: "error",
-        message: error.message
+            status: "error",
+            message: error.message
         });
     }
 };
@@ -92,14 +92,60 @@ export const clearCart = async (req, res) => {
         const { cid } = req.params;
         const cart = await cartManager.clearCart(cid);
         res.status(200).json({
-        status: "success",
-        message: "Carrito vaciado exitosamente.",
-        data: cart
+            status: "success",
+            message: "Carrito vaciado exitosamente.",
+            data: cart
         });
     } catch (error) {
         res.status(400).json({
-        status: "error",
-        message: error.message
+            status: "error",
+            message: error.message
+        });
+    }
+};
+
+//* actualizar TODO el carrito con un array de productos (NUEVA)
+export const updateCart = async (req, res) => {
+    try {
+        const { cid } = req.params;
+        const { products } = req.body;
+        const cart = await cartManager.updateCart(cid, products);
+        res.status(200).json({
+            status: "success",
+            message: "Carrito actualizado exitosamente.",
+            data: cart
+        });
+    } catch (error) {
+        res.status(400).json({
+            status: "error",
+            message: error.message
+        });
+    }
+};
+
+//* actualizar la cantidad de un producto específico (NUEVA)
+export const updateProductQuantity = async (req, res) => {
+    try {
+        const { cid, pid } = req.params;
+        const { quantity } = req.body;
+        
+        if (!quantity || quantity < 1) {
+            return res.status(400).json({
+                status: "error",
+                message: "La cantidad debe ser un número mayor a 0"
+            });
+        }
+        
+        const cart = await cartManager.updateProductQuantity(cid, pid, quantity);
+        res.status(200).json({
+            status: "success",
+            message: "Cantidad actualizada exitosamente.",
+            data: cart
+        });
+    } catch (error) {
+        res.status(400).json({
+            status: "error",
+            message: error.message
         });
     }
 };

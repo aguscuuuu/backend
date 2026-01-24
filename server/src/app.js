@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ quiet: true });
 
 import express from "express";
 import { router as productsRouter } from "./routes/products-router.js";

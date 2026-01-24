@@ -37,24 +37,19 @@ class CartManager {
     //* agrega un producto al carrito
     addProdToCart = async (cartId, productId) => {
         try {
-            // verifica que el producto exista
             const product = await ProductModel.findById(productId);
             if (!product) throw new Error("Product not found");
 
-            // busca el carrito
             const cart = await CartModel.findById(cartId);
             if (!cart) throw new Error("Cart not found");
 
-            // busca si el producto ya está en el carrito
             const prodInCart = cart.products.find(
                 p => p.product.toString() === productId
             );
 
             if (prodInCart) {
-                // si ya existe, incrementa la cantidad
                 prodInCart.quantity++;
             } else {
-                // si no existe, lo agrega con cantidad 1
                 cart.products.push({
                     product: productId,
                     quantity: 1
@@ -62,8 +57,6 @@ class CartManager {
             }
 
             await cart.save();
-            
-            // devuelve el carrito con los productos poblados
             return await cart.populate('products.product');
         } catch (error) {
             throw new Error(error);
@@ -97,6 +90,45 @@ class CartManager {
             );
             if (!cart) throw new Error("Cart not found");
             return cart;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    //* actualiza TODO el carrito con un array de productos
+    updateCart = async (cartId, products) => {
+        try {
+            const cart = await CartModel.findByIdAndUpdate(
+                cartId,
+                { products },
+                { new: true }
+            ).populate('products.product');
+            if (!cart) throw new Error("Cart not found");
+            return cart;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    //* actualiza la cantidad de un producto específico en el carrito
+    updateProductQuantity = async (cartId, productId, quantity) => {
+        try {
+
+            const cart = await CartModel.findById(cartId);
+            if (!cart) throw new Error("Cart not found");
+
+            const productInCart = cart.products.find(
+                p => p.product.toString() === productId
+            );
+
+            if (!productInCart) {
+                throw new Error("Product not found in cart");
+            }
+
+            productInCart.quantity = quantity;
+            await cart.save();
+            
+            return await cart.populate('products.product');
         } catch (error) {
             throw new Error(error);
         }
