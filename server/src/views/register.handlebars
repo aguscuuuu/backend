@@ -1,0 +1,114 @@
+<div style="max-width: 450px; margin: 60px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+    <h1 style="text-align: center; margin-bottom: 10px; color: #333;">Crear Cuenta</h1>
+    <p style="text-align: center; color: #888; margin-bottom: 30px;">Completa tus datos para registrarte</p>
+
+    <form id="registerForm" style="display: flex; flex-direction: column; gap: 18px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                    👤 Nombre
+                </label>
+                <input type="text" id="first_name" required placeholder="Juan"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s;"
+                    onfocus="this.style.borderColor='#667eea'" onblur="this.style.borderColor='#e0e0e0'">
+            </div>
+
+            <div>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                    👤 Apellido
+                </label>
+                <input type="text" id="last_name" required placeholder="Pérez"
+                    style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s;"
+                    onfocus="this.style.borderColor='#667eea'" onblur="this.style.borderColor='#e0e0e0'">
+            </div>
+        </div>
+
+        <div>
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                📧 Email
+            </label>
+            <input type="email" id="email" required placeholder="tu@email.com"
+                style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s;"
+                onfocus="this.style.borderColor='#667eea'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+
+        <div>
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                🎂 Edad
+            </label>
+            <input type="number" id="age" required min="1" max="120" placeholder="25"
+                style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s;"
+                onfocus="this.style.borderColor='#667eea'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+
+        <div>
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                🔒 Contraseña
+            </label>
+            <input type="password" id="password" required minlength="6" placeholder="Mínimo 6 caracteres"
+                style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s;"
+                onfocus="this.style.borderColor='#667eea'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+
+        <div>
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                🔒 Confirmar Contraseña
+            </label>
+            <input type="password" id="confirmPassword" required minlength="6" placeholder="Repite tu contraseña"
+                style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s;"
+                onfocus="this.style.borderColor='#667eea'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%; padding: 15px; font-size: 1.1rem; margin-top: 10px;">
+            📝 Crear Cuenta
+        </button>
+
+        <div style="text-align: center; margin-top: 10px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+            <p style="color: #666; margin-bottom: 10px;">¿Ya tienes cuenta?</p>
+            <a href="/login" style="color: #667eea; text-decoration: none; font-weight: 600; font-size: 1.05rem;">
+                🔐 Inicia sesión aquí
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+            alert('❌ Las contraseñas no coinciden');
+            return;
+        }
+
+        const userData = {
+            first_name: document.getElementById('first_name').value,
+            last_name: document.getElementById('last_name').value,
+            email: document.getElementById('email').value,
+            age: parseInt(document.getElementById('age').value),
+            password: password
+        };
+
+        try {
+            const response = await fetch('/api/users/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData)
+            });
+
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                alert('✅ Cuenta creada correctamente. Ahora puedes iniciar sesión.');
+                window.location.href = '/login';
+            } else {
+                alert('❌ ' + data.message);
+            }
+        } catch (error) {
+            alert('❌ Error al crear cuenta');
+        }
+    });
+</script>

@@ -39,7 +39,7 @@ export const registerUser = async (req, res) => {
         const user = await userManager.register(req.body);
         res.status(201).json({
         status: "success",
-        message: "Usuario registrado exitosamente.",
+        message: "Usuario registrado exitosamente",
         data: user
         });
     } catch (error) {
@@ -58,24 +58,47 @@ export const loginUser = async (req, res) => {
         if (!email || !password) {
         return res.status(400).json({
             status: "error",
-            message: "Email y contraseña son requeridos."
+            message: "Email y contraseña son requeridos"
         });
         }
 
         const user = await userManager.login(email, password);
-    
+        
+        // guardar usuario en sesión
+        req.session.user = {
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        role: user.role,
+        isAdmin: user.role === 'admin'
+        };
+        
         res.status(200).json({
-            status: "success",
-            message: "Login exitoso.",
-            data: user
-            // token: token
-            });
+        status: "success",
+        message: "Login exitoso",
+        data: user,
+        isAdmin: user.role === 'admin' 
+        });
     } catch (error) {
-            res.status(401).json({
-            status: "error",
-            message: error.message
+        res.status(401).json({
+        status: "error",
+        message: error.message
         });
     }
+};
+
+//* logout
+export const logoutUser = (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+        return res.status(500).json({
+            status: "error",
+            message: "Error al cerrar sesión"
+        });
+        }
+        res.redirect('/login');
+    });
 };
 
 //* actualizar un usuario
@@ -85,7 +108,7 @@ export const updateUser = async (req, res) => {
         const updatedUser = await userManager.update(uid, req.body);
         res.status(200).json({
         status: "success",
-        message: "Usuario actualizado exitosamente.",
+        message: "Usuario actualizado exitosamente",
         data: updatedUser
         });
     } catch (error) {

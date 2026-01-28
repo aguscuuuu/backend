@@ -20,9 +20,11 @@
   "homepage": "https://github.com/aguscuuuu/backend#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "connect-mongo": "^6.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-handlebars": "^8.0.3",
+    "express-session": "^1.19.0",
     "mongoose": "^9.1.4",
     "mongoose-paginate-v2": "^1.9.1",
     "multer": "^2.0.2",

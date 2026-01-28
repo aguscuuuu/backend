@@ -1,7 +1,6 @@
 import { productManager } from "../managers/product-manager.js";
 import { cartManager } from "../managers/cart-manager.js";
 
-//* formatear número a pesos argentinos
 const formatARS = (value) => {
     return new Intl.NumberFormat('es-AR', {
         style: 'currency',
@@ -10,36 +9,44 @@ const formatARS = (value) => {
     }).format(value);
 };
 
-//* vista de productos con paginación
-export const getProductsView = async (req, res) => {
+//* página principal
+export const getHomeView = async (req, res) => {
     try {
         const result = await productManager.getAll(req.query);
 
         const productsFormatted = result.payload.map(p => ({
             ...p,
-            priceFormatted: p.price.toLocaleString('es-AR', {
-                style: 'currency',
-                currency: 'ARS',
-                minimumFractionDigits: 2
-            })
+            priceFormatted: formatARS(p.price)
         }));
 
-        res.render('products', {
-            title: 'Productos',
+        res.render('home', {
+            title: 'Inicio',
             products: productsFormatted,
             page: result.page,
             totalPages: result.totalPages,
             hasPrevPage: result.hasPrevPage,
             hasNextPage: result.hasNextPage,
-            prevLink: result.prevLink,
-            nextLink: result.nextLink
+            prevLink: result.prevLink?.replace('/products', ''),
+            nextLink: result.nextLink?.replace('/products', ''),
+            user: req.session?.user || null
         });
     } catch (error) {
         res.status(500).send('Error al cargar productos.');
     }
 };
 
+//* panel de administración (admin)
+export const getRealTimeProductsView = (req, res) => {
+    // Verificar que el usuario sea admin
+    if (!req.session?.user || req.session.user.role !== 'admin') {
+        return res.status(403).send('Acceso denegado. Solo administradores.');
+    }
 
+    res.render('realTimeProducts', {
+        title: 'Panel de Administración',
+        user: req.session.user
+    });
+};
 
 //* vista de detalle de producto
 export const getProductDetailView = async (req, res) => {
@@ -52,7 +59,8 @@ export const getProductDetailView = async (req, res) => {
 
         res.render('productDetail', {
             title: product.title,
-            product
+            product,
+            user: req.session?.user || null
         });
     } catch (error) {
         res.status(404).send('Producto no encontrado.');
@@ -85,7 +93,8 @@ export const getCartView = async (req, res) => {
         res.render('cart', {
             title: 'Mi Carrito',
             cart,
-            total: formatARS(total)
+            total: formatARS(total),
+            user: req.session?.user || null
         });
     } catch (error) {
         res.status(404).send('Carrito no encontrado.');

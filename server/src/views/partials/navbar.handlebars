@@ -1,25 +1,42 @@
 <nav>
-    <h2 style="color: white; font-size: 40px; margin-right: 60px">Vertex</h2>
-    <a href="/products">Productos</a>
-    <a href="#" onclick="goToCart(); return false;">Carrito<span id="cartCount"></span></a>
+    <div style="display: flex; gap: 20px; align-items: center; flex: 1;">
+        {{#if user.isAdmin}}
+            <!-- navbar para admin -->
+            <a href="/realtimeproducts">⚡ Panel Admin</a>
+        {{else}}
+            <!-- navbar para usuarios -->
+            <a href="/">🏠 Inicio</a>
+            <a href="#" onclick="goToCart(); return false;">🛒 Mi Carrito</a>
+        {{/if}}
+    </div>
+    
+    <div style="display: flex; gap: 15px; align-items: center;">
+        {{#if user}}
+            <span style="color: white;">👤 {{user.first_name}}</span>
+            {{#if user.isAdmin}}
+                <span style="background: #ffc107; color: #333; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem;">ADMIN</span>
+            {{/if}}
+            <a href="/logout" style="background: #dc3545; padding: 8px 16px; border-radius: 6px;">Cerrar sesión</a>
+        {{else}}
+            <a href="/login" style="background: #28a745; padding: 8px 16px; border-radius: 6px;">🔐 Iniciar sesión</a>
+            <a href="/register" style="background: #667eea; padding: 8px 16px; border-radius: 6px;">📝 Registrarse</a>
+        {{/if}}
+    </div>
 </nav>
 
+{{#unless user.isAdmin}}
 <script>
-    // inicializar carrito al cargar la página
     window.addEventListener('DOMContentLoaded', async () => {
         await ensureCartExists();
     });
 
-    // asegurar que existe un carrito
     async function ensureCartExists() {
         let cartId = localStorage.getItem('cartId');
         
-        // verificar si el carrito existe en la bd
         if (cartId) {
             try {
                 const response = await fetch(`/api/carts/${cartId}`);
                 if (!response.ok) {
-                    // el carrito no existe, crear uno nuevo
                     cartId = null;
                     localStorage.removeItem('cartId');
                 }
@@ -29,7 +46,6 @@
             }
         }
         
-        // si no hay carrito válido, crear uno nuevo
         if (!cartId) {
             try {
                 const response = await fetch('/api/carts', { method: 'POST' });
@@ -37,14 +53,13 @@
                 cartId = data.data._id;
                 localStorage.setItem('cartId', cartId);
             } catch (error) {
-                console.error('Error al crear carrito: ', error);
+                console.error('Error al crear carrito:', error);
             }
         }
         
         return cartId;
     }
 
-    // ir al carrito
     async function goToCart() {
         const cartId = await ensureCartExists();
         if (cartId) {
@@ -52,7 +67,6 @@
         }
     }
 
-    // función global para agregar al carrito (usada en products.handlebars)
     window.addToCartGlobal = async function(productId) {
         const cartId = await ensureCartExists();
         
@@ -63,12 +77,13 @@
             const data = await response.json();
             
             if (data.status === 'success') {
-                alert('✅ Producto agregado al carrito.');
+                alert('✅ Producto agregado al carrito');
             } else {
                 alert('❌ Error: ' + data.message);
             }
         } catch (error) {
-            alert('❌ Error al agregar al carrito.');
+            alert('❌ Error al agregar al carrito');
         }
     };
 </script>
+{{/unless}}

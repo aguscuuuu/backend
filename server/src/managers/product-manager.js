@@ -38,7 +38,7 @@ class ProductManager {
             };
             const result = await ProductModel.paginate(filter, options);
             // construir links de navegación
-            const baseUrl = '/products'; 
+            const baseUrl = '/'; 
             const buildLink = (pageNum) => {
                 if (!pageNum) return null;
                 let link = `${baseUrl}?page=${pageNum}&limit=${limit}`;
