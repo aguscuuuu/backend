@@ -24,7 +24,7 @@ This step ensures that **Node.js** downloads and prepares the required libraries
 
 **3.** Start the server from the project’s root directory.
 ```sh
-node server/server.js
+npm start
 ```
 Running this command initializes the **Express** application, sets up middleware, mounts all routes, and begins listening for incoming **HTTP requests**. If the folder structure is modified, the path must be adjusted accordingly.
 
@@ -33,7 +33,7 @@ The server listens on port `8080` by default.
 
 **4.** Open the main route in your browser.
 ```sh
-localhost:8080/
+http://localhost:8080/
 ```
 Accessing this URL allows you to confirm that the server is running and properly responding to HTTP requests. The root endpoint typically returns a basic message indicating that the API is active, serving as a quick health check for the application. From this point, you can begin navigating through the available routes or start testing more complex endpoints using tools such as Postman, Thunder Client, or cURL.
 

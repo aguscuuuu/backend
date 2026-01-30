@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node C:/Users/Agustin/Documents/repositories/backend/server/server.js"
+    "start": "node server/server.js"
   },
   "repository": {
     "type": "git",
