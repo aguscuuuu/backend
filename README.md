@@ -4,8 +4,6 @@ Backend **REST API** project designed to manage products and shopping carts usin
 
 The structure is intentionally clean and scalable, making it suitable both for learning purposes and as a solid base for more advanced backend features such as authentication, authorization, validation, and deployment.
 
----
-
 # Run
 To execute the project locally, follow the steps below. All steps are required.
 
