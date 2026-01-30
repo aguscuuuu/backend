@@ -6,10 +6,10 @@ The structure is intentionally clean and scalable, making it suitable both for l
 
 ---
 
-## Run
+# Run
 To execute the project locally, follow the steps below. All steps are required.
 
-### 1. Clone the repository
+## 1. Clone the repository
 ```sh
 git clone https://github.com/aguscuuuu/backend.git
 ```
