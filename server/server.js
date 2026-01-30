@@ -5,7 +5,7 @@ import http from "http";
 import { productManager } from "./src/managers/product-manager.js";
 import open from "open";
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 
 const httpServer = http.createServer(app);
 const io = new Server(httpServer);

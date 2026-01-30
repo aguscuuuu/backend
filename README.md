@@ -1,41 +1,61 @@
-# Backend I - Coderhouse
+# Backend I – Coderhouse
 
-Backend **REST API** project designed to manage products and shopping carts using JSON files as a lightweight storage mechanism. This project aims to provide a clear and practical introduction to server-side development, focusing on routing, data handling, file-based persistence, and modular architecture. It serves as an excellent foundation for learners who are starting with backend concepts or for developers who need a simple environment for rapid prototyping.
+Backend **REST API** project designed to manage products and shopping carts using **MongoDB Atlas (cloud)** as the primary data persistence layer. The project focuses on core backend concepts such as routing, controllers, database integration, environment configuration, and modular architecture using Node.js and Express.
 
-The structure is intentionally minimalistic to make it easy to understand, extend, and refactor. Throughout the codebase, the logic is organized using managers, routers, and a clean separation of concerns, allowing the project to scale naturally as new functionalities are introduced.
+The structure is intentionally clean and scalable, making it suitable both for learning purposes and as a solid base for more advanced backend features such as authentication, authorization, validation, and deployment.
 
 ---
 
-### Run
+## Run
 
-To execute the project locally, follow these steps. Each action is required to ensure the environment is properly prepared and the server runs without errors.
+To execute the project locally, follow the steps below. All steps are required.
 
-**1.** Clone the repository to obtain a local copy of the project files. Open a command terminal somewhere on the file system and type:
+### 1. Clone the repository
+
 ```sh
 git clone https://github.com/aguscuuuu/backend.git
 ```
-Cloning is necessary because it downloads the entire codebase, including the server configuration, routers, managers, and data files used by the API.
+This downloads the complete codebase, including server configuration, routes, controllers, and database connection logic.
 
-**2.** Install all project dependencies listed in `package.json`.
+## 2. Install dependencies
 ```sh
 npm install
 ```
-This step ensures that **Node.js** downloads and prepares the required libraries. Without these dependencies (such as Express or UUID), the server would not be able to start or function correctly.
+This installs all required Node.js dependencies defined in `package.json`.
 
-**3.** Start the server from the project’s root directory.
+## 3. Environment variables configuration
+This project uses environment variables for configuration. The `.env` file is intentionally excluded from version control for security reasons. Create your own `.env` file from the project root: 
+```sh
+cp .env.example .env
+```
+Then edit .env and provide your own values:
+```sh
+PORT=8080
+NODE_ENV=development
+MONGO_URL=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/backend
+```
+>You must create your own MongoDB Atlas cluster and database user. The database will be created automatically on first connection.
+
+## 4. Start the server
 ```sh
 npm start
 ```
-Running this command initializes the **Express** application, sets up middleware, mounts all routes, and begins listening for incoming **HTTP requests**. If the folder structure is modified, the path must be adjusted accordingly.
+This command:
+- Loads environment variables
+- Initializes the Express server
+- Connects to MongoDB Atlas
+- Mounts API routes
+- Starts listening for HTTP requests
 
-The server listens on port `8080` by default. 
+By default, the server runs on port `8080`.
+
 >You can change this value inside `server.js` if you need the API to run on another port.
 
-**4.** Open the main route in your browser.
+## 5. Access the API.
 ```sh
 http://localhost:8080/
 ```
-Accessing this URL allows you to confirm that the server is running and properly responding to HTTP requests. The root endpoint typically returns a basic message indicating that the API is active, serving as a quick health check for the application. From this point, you can begin navigating through the available routes or start testing more complex endpoints using tools such as Postman, Thunder Client, or cURL.
+This endpoint acts as a health check to verify that the API is running correctly.
 
 ---
 
@@ -60,11 +80,12 @@ New features, validations, error handling improvements, and module expansions ar
 
 ### Used Technologies
 
-- **Languages:** JavaScript  
-- **Libraries | Frameworks:** Node Js | Express | UUID
-- **Databases:** JSON file-based persistence (no database yet)
-
-Additional technologies may be incorporated as the project evolves, such as MongoDB or PostgreSQL for data persistence, template engines, or authentication libraries.
+- **Language:** JavaScript
+- **Runtime:** Node.js
+- **Framework:** Express.js
+- **Database:** MongoDB Atlas (Cloud)
+- **ODM:** Mongoose
+- **Environment config:** dotenv
 
 ---
 
