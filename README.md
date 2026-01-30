@@ -7,11 +7,9 @@ The structure is intentionally clean and scalable, making it suitable both for l
 ---
 
 ## Run
-
 To execute the project locally, follow the steps below. All steps are required.
 
 ### 1. Clone the repository
-
 ```sh
 git clone https://github.com/aguscuuuu/backend.git
 ```
@@ -51,15 +49,13 @@ By default, the server runs on port `8080`.
 
 >You can change this value inside `server.js` if you need the API to run on another port.
 
-## 5. Access the API.
+## 5. Access the API
 ```sh
 http://localhost:8080/
 ```
 This endpoint acts as a health check to verify that the API is running correctly.
 
----
-
-### Status
+## Status
 
 *In progress.*
 - **Version:** `1.0.0`
@@ -69,16 +65,12 @@ New features, validations, error handling improvements, and module expansions ar
 
 - **Language:** `English`
 
----
-
-### Access
+## Access
 
 - **Repository:** https://github.com/aguscuuuu/backend  
 - **Deployment:** *(pending)*
 
----
-
-### Used Technologies
+## Used Technologies
 
 - **Language:** JavaScript
 - **Runtime:** Node.js
@@ -87,15 +79,11 @@ New features, validations, error handling improvements, and module expansions ar
 - **ODM:** Mongoose
 - **Environment config:** dotenv
 
----
-
-### Developers & Contributors
+## Developers & Contributors
 
 - **Agustin Cuenca** (`AgustinCuenca` `aguabentura08@gmail.com`) — *Main Developer*
 
----
-
-### License
+## License
 
 This work has been dedicated to the public domain under the **Creative Commons CC0 1.0 Universal Public Domain Dedication**.
 
