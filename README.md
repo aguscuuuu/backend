@@ -43,7 +43,7 @@ Accessing this URL allows you to confirm that the server is running and properly
 
 *In progress.*
 - **Version:** `1.0.0`
-- **Date:** `Nov 2025`
+- **Date:** `Jan 2026`
 
 New features, validations, error handling improvements, and module expansions are actively being developed.
 
