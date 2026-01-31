@@ -28,6 +28,15 @@
         padding: 0px;
         color: #1f2933;
     }
+    ::selection {
+        background-color: #0b3866;
+        color: #ffffff;
+    }
+
+    ::-moz-selection {
+        background-color: #0b3866;
+        color: #ffffff;
+    }
 
     .container {
         max-width: 1200px;
@@ -40,7 +49,7 @@
         color: #111827;
         margin-bottom: 30px;
         text-align: center;
-        font-size: 1.5rem;
+        font-size: 20px;
         font-weight: 500;
     }
 
@@ -54,7 +63,7 @@
         transition: background-color 0.25s ease;
         border: 1px solid #ddd;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 400;
     }
 
@@ -66,7 +75,7 @@
         background-color: #0b3866;
         background: linear-gradient(60deg, #0b3866 0%, #28517a 100%);
         padding: 25px 20px;
-        border-radius: 8px;
+        border-radius: 0;
         margin-bottom: 30px;
         display: flex;
         gap: 20px;
