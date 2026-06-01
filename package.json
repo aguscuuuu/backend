@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -30,7 +30,6 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.4",
     "mongoose-paginate-v2": "^1.9.1",
-    "multer": "^2.0.2",
     "open": "^11.0.0",
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",

@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import { verifyToken } from '../utils/jwt.js';
 
 export const verifyJWT = (req, res, next) => {
     const tokenFromCookie = req.cookies?.authToken;
@@ -8,18 +8,17 @@ export const verifyJWT = (req, res, next) => {
     if (!token) {
         return res.status(401).json({
             status: 'error',
-            message: 'No autenticado. Token no proporcionado.'
+            message: 'No autenticado. Token no proporcionado.',
         });
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
+        req.user = verifyToken(token);
         next();
-    } catch (error) {
+    } catch {
         return res.status(401).json({
             status: 'error',
-            message: 'Token inválido o expirado.'
+            message: 'Token inválido o expirado.',
         });
     }
 };
@@ -28,14 +27,14 @@ export const requireRole = (role) => (req, res, next) => {
     if (!req.user) {
         return res.status(401).json({
             status: 'error',
-            message: 'No autenticado.'
+            message: 'No autenticado.',
         });
     }
 
     if (req.user.role !== role) {
         return res.status(403).json({
             status: 'error',
-            message: `Acceso denegado. Se requiere rol '${role}'.`
+            message: `Acceso denegado. Se requiere rol '${role}'.`,
         });
     }
 

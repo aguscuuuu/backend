@@ -28,7 +28,8 @@ router.get("/home", isNotAdmin, getHomeView);
 // panel admin - (solo admin)
 router.get("/realtimeproducts", getRealTimeProductsView);
 
-// detalle de producto (ambos pueden ver)
+// catálogo de productos y detalle
+router.get("/products", isNotAdmin, getHomeView);
 router.get("/products/:pid", getProductDetailView);
 
 // carrito (solo usuarios normales)
