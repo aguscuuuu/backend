@@ -1,3 +1,4 @@
+import "./src/config/env.js";
 import app from "./src/app.js";
 import { initMongoDB } from "./src/config/connection.js";
 import { Server } from "socket.io";
