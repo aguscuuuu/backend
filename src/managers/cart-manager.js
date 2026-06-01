@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { CartModel } from "../models/cart-model.js";
 import { ProductModel } from "../models/product-model.js";
 
@@ -98,9 +99,19 @@ class CartManager {
     //* actualiza TODO el carrito con un array de productos
     updateCart = async (cartId, products) => {
         try {
+            if (!Array.isArray(products)) throw new Error("Products must be an array");
+
+            const sanitized = products.map(item => {
+                if (typeof item !== 'object' || item === null) throw new Error("Invalid product entry");
+                const { product, quantity } = item;
+                if (typeof product !== 'string' || !Types.ObjectId.isValid(product)) throw new Error("Invalid product id");
+                if (typeof quantity !== 'number' || quantity < 1) throw new Error("Invalid quantity");
+                return { product, quantity };
+            });
+
             const cart = await CartModel.findByIdAndUpdate(
                 cartId,
-                { products },
+                { products: sanitized },
                 { new: true }
             ).populate('products.product');
             if (!cart) throw new Error("Cart not found");
