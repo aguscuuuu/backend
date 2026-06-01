@@ -89,13 +89,13 @@ class ProductManager {
         try {
             const { title, description, price, status, stock, category, thumbnails } = obj;
             const updateData = {};
-            if (typeof title === 'string') updateData.title = title;
-            if (typeof description === 'string') updateData.description = description;
-            if (typeof price === 'number') updateData.price = price;
-            if (typeof status === 'boolean') updateData.status = status;
-            if (typeof stock === 'number') updateData.stock = stock;
-            if (typeof category === 'string') updateData.category = category;
-            if (Array.isArray(thumbnails) && thumbnails.every(t => typeof t === 'string')) updateData.thumbnails = thumbnails;
+            if (typeof title === 'string') updateData.title = String(title);
+            if (typeof description === 'string') updateData.description = String(description);
+            if (typeof price === 'number') updateData.price = Number(price);
+            if (typeof status === 'boolean') updateData.status = Boolean(status);
+            if (typeof stock === 'number') updateData.stock = Number(stock);
+            if (typeof category === 'string') updateData.category = String(category);
+            if (Array.isArray(thumbnails) && thumbnails.every(t => typeof t === 'string')) updateData.thumbnails = thumbnails.map(String);
 
             const updatedProduct = await ProductModel.findByIdAndUpdate(
                 id,

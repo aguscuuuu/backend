@@ -101,11 +101,11 @@ class UserManager {
         try {
             const { first_name, last_name, email, age, password } = obj;
             const updateData = {};
-            if (typeof first_name === 'string') updateData.first_name = first_name;
-            if (typeof last_name === 'string') updateData.last_name = last_name;
-            if (typeof email === 'string') updateData.email = email;
-            if (typeof age === 'number') updateData.age = age;
-            if (typeof password === 'string') updateData.password = await bcrypt.hash(password, 10);
+            if (typeof first_name === 'string') updateData.first_name = String(first_name);
+            if (typeof last_name === 'string') updateData.last_name = String(last_name);
+            if (typeof email === 'string') updateData.email = String(email);
+            if (typeof age === 'number') updateData.age = Number(age);
+            if (typeof password === 'string') updateData.password = await bcrypt.hash(String(password), 10);
 
             const updatedUser = await UserModel.findByIdAndUpdate(
                 id,
