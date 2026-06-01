@@ -28,7 +28,7 @@ class UserManager {
     //* obtiene un usuario por email (método útil)
     getByEmail = async (email) => {
         try {
-            const user = await UserModel.findOne({ email });
+            const user = await UserModel.findOne({ email: { $eq: email } });
             return user; // devuelve null si no existe
         } catch (error) {
             throw new Error(error);
@@ -43,7 +43,7 @@ class UserManager {
             }
 
             // verifica si el email ya existe
-            const existingUser = await UserModel.findOne({ email: obj.email });
+            const existingUser = await UserModel.findOne({ email: { $eq: obj.email } });
             if (existingUser) {
                 throw new Error("Email ya registrado.");
             }
@@ -51,10 +51,13 @@ class UserManager {
             // hashea la contraseña
             const hashedPassword = await bcrypt.hash(obj.password, 10);
 
-            // crea el usuario
+            // crea el usuario con solo los campos permitidos (evita escalada de privilegios)
             const user = await UserModel.create({
-                ...obj,
-                password: hashedPassword
+                first_name: obj.first_name,
+                last_name: obj.last_name,
+                email: obj.email,
+                age: obj.age,
+                password: hashedPassword,
             });
 
             // devuelve el usuario sin la contraseña
@@ -73,7 +76,7 @@ class UserManager {
     login = async (email, password) => {
         try {
             // busca el usuario por email
-            const user = await UserModel.findOne({ email });
+            const user = await UserModel.findOne({ email: { $eq: email } });
             if (!user) throw new Error("Credenciales inválidas.");
 
             // compara la contraseña
@@ -96,14 +99,17 @@ class UserManager {
     //* actualiza un usuario
     update = async (id, obj) => {
         try {
-            // si se está actualizando la contraseña, hashearla
-            if (obj.password) {
-                obj.password = await bcrypt.hash(obj.password, 10);
-            }
+            const { first_name, last_name, email, age, password } = obj;
+            const updateData = {};
+            if (first_name !== undefined) updateData.first_name = first_name;
+            if (last_name !== undefined) updateData.last_name = last_name;
+            if (email !== undefined) updateData.email = email;
+            if (age !== undefined) updateData.age = age;
+            if (password !== undefined) updateData.password = await bcrypt.hash(password, 10);
 
             const updatedUser = await UserModel.findByIdAndUpdate(
                 id,
-                obj,
+                updateData,
                 { new: true, runValidators: true }
             ).select('-password');
 
