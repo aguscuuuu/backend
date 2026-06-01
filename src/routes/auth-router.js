@@ -22,6 +22,14 @@ const authLimiter = rateLimit({
     legacyHeaders: false,
 });
 
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: { status: 'error', message: 'Demasiadas solicitudes. Intentá de nuevo en 15 minutos.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
 // ── Auth ──────────────────────────────────────────────
 router.post('/auth/register', authLimiter, register);
 router.post('/auth/login', authLimiter, login);
@@ -47,9 +55,9 @@ router.get('/session', getSession);
 
 // ── Rutas protegidas ──────────────────────────────────
 // 401 si no hay token válido
-router.get('/profile', verifyJWT, getProfile);
+router.get('/profile', apiLimiter, verifyJWT, getProfile);
 
 // 401 si no hay token, 403 si no es admin
-router.get('/admin', verifyJWT, requireRole('admin'), getAdmin);
+router.get('/admin', apiLimiter, verifyJWT, requireRole('admin'), getAdmin);
 
 export { router };
