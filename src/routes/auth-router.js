@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import passport from '../config/passport.js';
 import {
     register,
@@ -13,9 +14,17 @@ import { verifyJWT, requireRole } from '../middlewares/jwt-auth.js';
 
 const router = Router();
 
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    message: { status: 'error', message: 'Demasiados intentos. Intentá de nuevo en 15 minutos.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
 // ── Auth ──────────────────────────────────────────────
-router.post('/auth/register', register);
-router.post('/auth/login', login);
+router.post('/auth/register', authLimiter, register);
+router.post('/auth/login', authLimiter, login);
 router.get('/auth/logout', logout);
 
 // ── OAuth GitHub ──────────────────────────────────────
