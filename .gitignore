@@ -1,4 +1,29 @@
+# dependencias
 node_modules
+
+# variables de entorno (secretos)
 .env
+.env.*.local
+
+# documentación interna 
+PROJECT.md
+
+# herramientas / editores
 .github
 .claude
+.vscode
+.idea
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# artefactos / temporales
+coverage
+dist
+*.tmp
