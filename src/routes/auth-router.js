@@ -31,13 +31,13 @@ router.get('/auth/logout', logout);
 const isGithubConfigured = () =>
     process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_ID !== 'tu_github_client_id';
 
-router.get('/auth/github', (req, res, next) => {
+router.get('/auth/github', authLimiter, (req, res, next) => {
     if (!isGithubConfigured()) {
         return res.status(503).json({ status: 'error', message: 'OAuth GitHub no configurado. Agregar GITHUB_CLIENT_ID y GITHUB_CLIENT_SECRET al .env' });
     }
     passport.authenticate('github', { scope: ['user:email'] })(req, res, next);
 });
-router.get('/auth/github/callback', (req, res, next) => {
+router.get('/auth/github/callback', authLimiter, (req, res, next) => {
     if (!isGithubConfigured()) return res.redirect('/login');
     passport.authenticate('github', { failureRedirect: '/login' })(req, res, next);
 }, githubCallback);
