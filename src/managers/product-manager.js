@@ -89,13 +89,13 @@ class ProductManager {
         try {
             const { title, description, price, status, stock, category, thumbnails } = obj;
             const updateData = {};
-            if (title !== undefined) updateData.title = title;
-            if (description !== undefined) updateData.description = description;
-            if (price !== undefined) updateData.price = price;
-            if (status !== undefined) updateData.status = status;
-            if (stock !== undefined) updateData.stock = stock;
-            if (category !== undefined) updateData.category = category;
-            if (thumbnails !== undefined) updateData.thumbnails = thumbnails;
+            if (typeof title === 'string') updateData.title = title;
+            if (typeof description === 'string') updateData.description = description;
+            if (typeof price === 'number') updateData.price = price;
+            if (typeof status === 'boolean') updateData.status = status;
+            if (typeof stock === 'number') updateData.stock = stock;
+            if (typeof category === 'string') updateData.category = category;
+            if (Array.isArray(thumbnails) && thumbnails.every(t => typeof t === 'string')) updateData.thumbnails = thumbnails;
 
             const updatedProduct = await ProductModel.findByIdAndUpdate(
                 id,
