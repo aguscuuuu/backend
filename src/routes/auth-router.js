@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import rateLimit from 'express-rate-limit';
 import passport from '../config/passport.js';
+import { authLimiter, apiLimiter } from '../middlewares/rate-limiters.js';
 import {
     register,
     login,
@@ -14,21 +14,6 @@ import { verifyJWT, requireRole } from '../middlewares/jwt-auth.js';
 
 const router = Router();
 
-const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 10,
-    message: { status: 'error', message: 'Demasiados intentos. Intentá de nuevo en 15 minutos.' },
-    standardHeaders: true,
-    legacyHeaders: false,
-});
-
-const apiLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-    message: { status: 'error', message: 'Demasiadas solicitudes. Intentá de nuevo en 15 minutos.' },
-    standardHeaders: true,
-    legacyHeaders: false,
-});
 
 // ── Auth ──────────────────────────────────────────────
 router.post('/auth/register', authLimiter, register);
