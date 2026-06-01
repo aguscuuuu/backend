@@ -87,9 +87,19 @@ class ProductManager {
     //* actualiza un producto
     update = async (obj, id) => {
         try {
+            const { title, description, price, status, stock, category, thumbnails } = obj;
+            const updateData = {};
+            if (title !== undefined) updateData.title = title;
+            if (description !== undefined) updateData.description = description;
+            if (price !== undefined) updateData.price = price;
+            if (status !== undefined) updateData.status = status;
+            if (stock !== undefined) updateData.stock = stock;
+            if (category !== undefined) updateData.category = category;
+            if (thumbnails !== undefined) updateData.thumbnails = thumbnails;
+
             const updatedProduct = await ProductModel.findByIdAndUpdate(
                 id,
-                obj,
+                updateData,
                 { new: true, runValidators: true }
             );
             if (!updatedProduct) throw new Error("Producto no encontrado.");
