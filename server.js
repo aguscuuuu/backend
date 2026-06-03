@@ -78,7 +78,7 @@ io.on('connection', async (socket) => {
     });
 });
 
-initMongoDB();
+await initMongoDB();
 
 httpServer.listen(PORT, () => {
     logger.info(`Servidor corriendo en http://localhost:${PORT}`);
