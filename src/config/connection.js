@@ -7,6 +7,6 @@ export const initMongoDB = async () => {
         logger.info('MongoDB conectado exitosamente.');
     } catch (error) {
         logger.error(`Error al conectar con MongoDB: ${error.message}`);
-        throw new Error(error);
+        process.exit(1);
     }
 };
