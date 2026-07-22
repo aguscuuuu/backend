@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "start:local": "cross-env MONGO_URL=mongodb://localhost:27017/backend OPEN_BROWSER=false node server.js",
     "test": "mocha \"test/**/*.test.js\" --timeout 10000"
   },
   "repository": {
@@ -44,6 +45,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "chai": "^6.2.2",
+    "cross-env": "^10.1.0",
     "eslint": "^10.2.1",
     "globals": "^17.5.0",
     "mocha": "^11.7.6",
