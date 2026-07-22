@@ -18,6 +18,9 @@ The repository also includes a demo e-commerce application (products and carts w
 - [Local installation](#local-installation)
 - [Environment variables](#environment-variables)
 - [Usage examples](#usage-examples-curl)
+- [Tests funcionales](#tests-funcionales)
+- [Dockerización](#dockerización)
+- [Imagen en DockerHub](#imagen-en-dockerhub)
 - [License](#license)
 
 ---
@@ -161,7 +164,7 @@ PROTECTED ROUTE
 
 1) Clone and install dependencies
 ```sh
-git clone https://github.com/aguscuuuu/backend.git
+git clone https://github.com/aguscuu/backend.git
 ```
 ```sh
 cd backend
@@ -227,6 +230,184 @@ Session and logout (with cookie)
 curl -b cookies.txt http://localhost:8080/api/v1/session
 curl -b cookies.txt http://localhost:8080/api/v1/auth/logout
 ```
+
+---
+
+## Tests funcionales
+
+El proyecto incluye **tests funcionales** para todos los endpoints del router de
+productos (`src/routes/products-router.js`), el CRUD equivalente al `adoption.router.js`
+de la consigna. Se usan **Mocha** (runner), **Chai** (aserciones), **Supertest**
+(peticiones HTTP) y **Sinon** (mocks/stubs).
+
+### Estrategia de aislamiento
+
+- El router real se monta sobre una **app Express mínima** (`express.json()` + router +
+  `errorHandler`). **No** se levanta `server.js`, ni Socket.IO, ni se abre el navegador.
+- El `productManager` (única dependencia externa, que habla con MongoDB) se reemplaza con
+  **stubs de Sinon**. **Ningún test toca la base de datos real** → son rápidos, deterministas
+  y aislados.
+- Cada endpoint se prueba en casos de **éxito**, **error del servidor (500)**,
+  **no encontrado (404)**, **validación (400)** y **error de negocio (400)**.
+
+### Cobertura por endpoint
+
+| Endpoint | Casos probados |
+| --- | --- |
+| `GET /api/products` | 200 lista paginada · reenvío de query params · 500 error del manager |
+| `GET /api/products/:pid` | 200 producto encontrado · 404 no encontrado |
+| `POST /api/products` | 201 creado · 400 validación (no llama al manager) · 400 error de negocio |
+| `PUT /api/products/:pid` | 200 actualizado · 400 validación · 400 no encontrado |
+| `DELETE /api/products/:pid` | 200 eliminado · 404 no encontrado |
+
+### Ejecutar los tests
+
+```sh
+npm install      # instala también las devDependencies (mocha, chai, sinon, supertest)
+npm test
+```
+
+Salida esperada (13 tests en verde):
+
+```
+  Router de productos - /api/products
+    GET /api/products
+      ✔ responde 200 y la lista paginada de productos (éxito)
+      ✔ reenvía los query params (limit, page, sort, query) al manager
+      ✔ responde 500 si el manager lanza un error (error del servidor)
+    GET /api/products/:pid
+      ✔ responde 200 y el producto cuando existe (éxito)
+      ✔ responde 404 cuando el producto no existe (no encontrado)
+    POST /api/products
+      ✔ responde 201 y crea el producto con body válido (éxito)
+      ✔ responde 400 y NO llama al manager con body inválido (validación)
+      ✔ responde 400 si el manager falla al crear (error de negocio)
+    PUT /api/products/:pid
+      ✔ responde 200 y actualiza el producto con body válido (éxito)
+      ✔ responde 400 con body inválido (validación)
+      ✔ responde 400 si el producto a actualizar no existe (error de negocio)
+    DELETE /api/products/:pid
+      ✔ responde 200 y elimina el producto cuando existe (éxito)
+      ✔ responde 404 cuando el producto a eliminar no existe (no encontrado)
+
+  13 passing (191ms)
+```
+
+---
+
+## Dockerización
+
+El `Dockerfile` usa **multi-stage build** sobre `node:22-alpine` para producir una imagen
+pequeña, reproducible y segura.
+
+### Decisiones de optimización
+
+| Decisión | Motivo |
+| --- | --- |
+| Base `node:22-alpine` | Imagen mínima (~50 MB base) con Node LTS. |
+| **Multi-stage** (`deps` → `runtime`) | La etapa final solo lleva `node_modules` de producción y el código; no arrastra cache de npm ni herramientas de build. |
+| `npm ci --omit=dev` | Instala exactamente lo del `package-lock.json` y **excluye** devDependencies (mocha, chai, etc.). |
+| `COPY package*.json` antes que el código | Aprovecha el **cache de capas**: si no cambian las dependencias, no se reinstala nada. |
+| `.dockerignore` | Excluye `node_modules`, `.env`, `test`, `.git`, etc. → build más rápido y sin secretos. |
+| `USER node` | Corre como usuario **sin privilegios** (no root). |
+| `ENV NODE_ENV=production OPEN_BROWSER=false` | Evita que `server.js` intente abrir un navegador dentro del contenedor. |
+| `HEALTHCHECK` | Docker monitorea la salud del contenedor contra `/api/products`. |
+
+### Opción recomendada: `docker compose` (app + MongoDB, auto-contenido)
+
+La forma más simple y reproducible es levantar la app **junto a un MongoDB en contenedor**,
+sin depender de Atlas ni de un `.env`:
+
+```sh
+docker compose up --build      # construye y levanta app + mongo
+# app disponible en http://localhost:8080
+docker compose down -v         # detiene y limpia
+```
+
+Evidencia real de ejecución (`docker compose ps`):
+
+```
+NAME            IMAGE                   STATUS                   PORTS
+backend-app     aguscuu/backend:1.0.0   Up 3 minutes (healthy)   0.0.0.0:8080->8080/tcp
+backend-mongo   mongo:7                 Up 5 minutes (healthy)   27017/tcp
+```
+
+Prueba real de los endpoints dentro del contenedor:
+
+```sh
+$ curl http://localhost:8080/api/products
+{"status":"success","payload":[],"totalPages":1,"page":1,"hasPrevPage":false,"hasNextPage":false, ...}
+
+$ curl -X POST http://localhost:8080/api/products -H "Content-Type: application/json" \
+    -d '{"title":"Teclado mecanico","description":"Switches rojos RGB","price":45000,"stock":25,"category":"perifericos"}'
+{"status":"success","message":"Producto creado exitosamente.","data":{ ... "_id":"6a6104e7e40f9644d66f5ef0" ...}}
+HTTP 201
+```
+
+### Opción alternativa: `docker run` con tu propia base
+
+```sh
+# 1) Construir la imagen
+docker build -t aguscuu/backend:1.0.0 -t aguscuu/backend:latest .
+
+# 2) Ejecutar apuntando a tu MongoDB (Atlas o propio)
+docker run --rm -p 8080:8080 --env-file .env aguscuu/backend:1.0.0
+```
+
+> **Nota:** el contenedor necesita un `MONGO_URL` accesible. Con `docker run --env-file .env`
+> apuntando a **MongoDB Atlas**, asegurate de tener tu **IP en la whitelist** de Atlas
+> (Network Access). Sin base de datos alcanzable, el proceso finaliza (`fail-fast`).
+> Si estás detrás de un **proxy/DNS corporativo**, usá la opción `docker compose` de arriba.
+
+---
+
+## Imagen en DockerHub
+
+La imagen está **publicada y accesible públicamente** en DockerHub:
+
+- **Repositorio:** https://hub.docker.com/r/aguscuu/backend
+- **Imagen:** `aguscuu/backend`
+- **Tags:** `1.0.0`, `latest`
+- **Digest:** `sha256:6e1381c0ad39334ea8c26da09ed5943b4652dc68106fea3e8d72e1d877323b39`
+- **Tamaño:** 284 MB
+
+### Subir la imagen (etiquetado + push) — evidencia real
+
+```sh
+docker build -t aguscuu/backend:1.0.0 -t aguscuu/backend:latest .
+docker push aguscuu/backend:1.0.0
+docker push aguscuu/backend:latest
+```
+
+```
+1.0.0:  digest: sha256:6e1381c0ad39334ea8c26da09ed5943b4652dc68106fea3e8d72e1d877323b39  size: 856
+latest: digest: sha256:6e1381c0ad39334ea8c26da09ed5943b4652dc68106fea3e8d72e1d877323b39  size: 856
+```
+
+### Descargar y ejecutar desde DockerHub
+
+```sh
+docker pull aguscuu/backend:latest
+docker run --rm -p 8080:8080 --env-file .env aguscuu/backend:latest
+```
+
+### Escaneo básico de seguridad (`docker scout quickview`) — resultado real
+
+```
+ Target             │  aguscuu/backend:1.0.0  │    1C     6H     7M     2L
+ Base image         │  node:22-alpine         │    1C     4H     7M     0L
+ Updated base image │  node:24-alpine         │    1C     3H     4M     2L
+
+ Status │              Policy              │       Results
+────────┼──────────────────────────────────┼───────────────────────
+   v    │ Default non-root user            │       (cumple)
+   v    │ No high-profile vulnerabilities  │  0C 0H 0M 0L (cumple)
+   v    │ No outdated base images          │       (cumple)
+```
+
+Las vulnerabilidades detectadas provienen de dependencias de la imagen base; el escaneo
+recomienda actualizar a `node:24-alpine` para reducirlas. La política de **usuario no-root**
+y la de **sin vulnerabilidades de alto perfil** se cumplen.
 
 ---
 

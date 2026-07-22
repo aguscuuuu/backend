@@ -82,7 +82,13 @@ await initMongoDB();
 
 httpServer.listen(PORT, () => {
     logger.info(`Servidor corriendo en http://localhost:${PORT}`);
-    open(`http://localhost:${PORT}`);
-    open(`https://cloud.mongodb.com/v2/6937689a65392c2e1da8aa2f#/explorer/6937693187a3156bcbc3c49d/backend`);
+    // Solo abrir navegadores en desarrollo local. En un contenedor Docker
+    // (NODE_ENV=production u OPEN_BROWSER=false) no hay navegador y open()
+    // fallaría, por eso se omite.
+    const shouldOpen =
+        process.env.NODE_ENV !== 'production' && process.env.OPEN_BROWSER !== 'false';
+    if (shouldOpen) {
+        open(`http://localhost:${PORT}`).catch(() => {});
+    }
 });
 

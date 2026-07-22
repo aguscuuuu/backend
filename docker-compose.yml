@@ -1,0 +1,55 @@
+# docker-compose para ejecutar la aplicación junto a un MongoDB local.
+# Demostración auto-contenida: no requiere MongoDB Atlas ni un archivo .env.
+#
+# Uso:
+#   docker compose up --build         # construye y levanta app + mongo
+#   docker compose down -v            # detiene y borra los volúmenes
+#
+# La app queda en http://localhost:8080 (ej: GET /api/products).
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: backend-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - appnet
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  app:
+    image: aguscuu/backend:1.0.0
+    build: .
+    container_name: backend-app
+    restart: on-failure
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      OPEN_BROWSER: "false"
+      PORT: "8080"
+      MONGO_URL: mongodb://mongo:27017/backend
+      SESSION_SECRET: demo_session_secret_cambiar_en_produccion
+      JWT_SECRET: demo_jwt_secret_cambiar_en_produccion_min_32_chars
+      # Valores dummy: la estrategia de GitHub se instancia al arrancar y exige
+      # un clientID. No se usan salvo que se pruebe el login con GitHub.
+      GITHUB_CLIENT_ID: dummy_client_id
+      GITHUB_CLIENT_SECRET: dummy_client_secret
+      GITHUB_CALLBACK_URL: http://localhost:8080/api/v1/auth/github/callback
+    ports:
+      - "8080:8080"
+    networks:
+      - appnet
+
+volumes:
+  mongo-data:
+
+networks:
+  appnet:

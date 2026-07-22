@@ -1,0 +1,36 @@
+# dependencias (se reinstalan dentro de la imagen)
+node_modules
+npm-debug.log*
+
+# variables de entorno (secretos) — se inyectan en runtime con -e / --env-file
+.env
+.env.*.local
+
+# tests y artefactos de desarrollo
+test
+coverage
+.nyc_output
+
+# git y CI
+.git
+.gitignore
+.github
+
+# herramientas / editores
+.vscode
+.idea
+.claude
+
+# documentación interna
+PROJECT.md
+docs
+
+# sistema operativo
+.DS_Store
+Thumbs.db
+
+# el propio Dockerfile no necesita copiarse
+Dockerfile
+.dockerignore
+*.tmp
+*.log
