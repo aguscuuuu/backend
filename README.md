@@ -164,7 +164,7 @@ PROTECTED ROUTE
 
 1) Clone and install dependencies
 ```sh
-git clone https://github.com/aguscuu/backend.git
+git clone https://github.com/aguscuuuu/backend.git
 ```
 ```sh
 cd backend
