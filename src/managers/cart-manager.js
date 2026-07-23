@@ -96,7 +96,7 @@ class CartManager {
         }
     }
 
-    //* actualiza TODO el carrito con un array de productos
+    //* actualiza todo el carrito con un array de productos
     updateCart = async (cartId, products) => {
         try {
             if (!Array.isArray(products)) throw new Error("Products must be an array");

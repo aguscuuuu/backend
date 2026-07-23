@@ -1,7 +1,7 @@
 /**
- * Valida el body de creación/actualización de producto.
- * Devuelve un array de strings con los errores (vacío = válido).
- * Diseñado para usarse con el middleware validate() de validate.js.
+ * valida el body de creación/actualización de producto.
+ * devuelve un array de strings con los errores (vacío = válido).
+ * diseñado para usarse con el middleware validate() de validate.js.
  */
 export const productValidator = (body) => {
     const errors = [];

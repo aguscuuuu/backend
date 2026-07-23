@@ -32,11 +32,11 @@ const productSchema = new Schema({
         required: true
     },
     thumbnails: {
-        type: [String],  // array de strings (URLs de imágenes)
+        type: [String],  // array de strings (urls de imágenes)
         default: []
     }
 }, {
-  timestamps: true,  // agrega createdAt y updatedAt automáticamente
+  timestamps: true,  // agrega createdat y updatedat automáticamente
   versionKey: false  // elimina el campo __v
 });
 

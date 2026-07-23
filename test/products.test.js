@@ -1,15 +1,15 @@
 /**
- * Tests funcionales del router de productos (src/routes/products-router.js).
+ * tests funcionales del router de productos (src/routes/products-router.js).
  *
- * Estrategia:
- *  - Se monta el router real sobre una app Express mínima y aislada
- *    (solo express.json() + el router + el errorHandler). No se levanta
+ * estrategia:
+ *  - se monta el router real sobre una app express mínima y aislada
+ *    (solo express.json() + el router + el errorhandler). no se levanta
  *    el servidor completo (server.js) ni se abre navegador ni sockets.
- *  - Las dependencias externas (MongoDB a través de productManager) se
- *    reemplazan con STUBS de sinon. Ningún test toca la base de datos real.
- *  - Se usa supertest para disparar peticiones HTTP contra la app en memoria.
+ *  - las dependencias externas (mongodb a través de productmanager) se
+ *    reemplazan con stubs de sinon. ningún test toca la base de datos real.
+ *  - se usa supertest para disparar peticiones http contra la app en memoria.
  *
- * Con esto se validan los 5 endpoints del router cubriendo casos de
+ * con esto se validan los 5 endpoints del router cubriendo casos de
  * éxito, error del servidor, "no encontrado" y validación de datos.
  */
 
@@ -22,8 +22,8 @@ import { router as productsRouter } from '../src/routes/products-router.js';
 import { productManager } from '../src/managers/product-manager.js';
 import { errorHandler } from '../src/middlewares/error-handler.js';
 
-// ── App de pruebas aislada ────────────────────────────────────────────
-// Solo lo indispensable para ejercitar el router de productos.
+// ── app de pruebas aislada ────────────────────────────────────────────
+// solo lo indispensable para ejercitar el router de productos.
 const buildTestApp = () => {
     const app = express();
     app.use(express.json());
@@ -34,7 +34,7 @@ const buildTestApp = () => {
 
 const requester = supertest(buildTestApp());
 
-// Producto de ejemplo reutilizable como "fake" en las respuestas del manager.
+// producto de ejemplo reutilizable como "fake" en las respuestas del manager.
 const fakeProduct = {
     _id: '650000000000000000000001',
     title: 'Teclado mecánico',
@@ -55,13 +55,13 @@ const validBody = {
 };
 
 describe('Router de productos - /api/products', () => {
-    // Después de cada test se restauran todos los stubs para no
+    // después de cada test se restauran todos los stubs para no
     // contaminar el siguiente caso.
     afterEach(() => {
         sinon.restore();
     });
 
-    // ── GET /api/products ────────────────────────────────────────────
+    // ── get /api/products ────────────────────────────────────────────
     describe('GET /api/products', () => {
         it('responde 200 y la lista paginada de productos (éxito)', async () => {
             const managerResult = {
@@ -109,7 +109,7 @@ describe('Router de productos - /api/products', () => {
         });
     });
 
-    // ── GET /api/products/:pid ───────────────────────────────────────
+    // ── get /api/products/:pid ───────────────────────────────────────
     describe('GET /api/products/:pid', () => {
         it('responde 200 y el producto cuando existe (éxito)', async () => {
             sinon.stub(productManager, 'getOne').resolves(fakeProduct);
@@ -134,7 +134,7 @@ describe('Router de productos - /api/products', () => {
         });
     });
 
-    // ── POST /api/products ───────────────────────────────────────────
+    // ── post /api/products ───────────────────────────────────────────
     describe('POST /api/products', () => {
         it('responde 201 y crea el producto con body válido (éxito)', async () => {
             const stub = sinon.stub(productManager, 'create').resolves(fakeProduct);
@@ -162,7 +162,7 @@ describe('Router de productos - /api/products', () => {
             expect(body.status).to.equal('error');
             expect(body.message).to.equal('Datos inválidos');
             expect(body.errors).to.be.an('array').that.is.not.empty;
-            // La validación cortó antes: el manager nunca se ejecutó.
+            // la validación cortó antes: el manager nunca se ejecutó.
             expect(stub.called).to.be.false;
         });
 
@@ -179,7 +179,7 @@ describe('Router de productos - /api/products', () => {
         });
     });
 
-    // ── PUT /api/products/:pid ───────────────────────────────────────
+    // ── put /api/products/:pid ───────────────────────────────────────
     describe('PUT /api/products/:pid', () => {
         it('responde 200 y actualiza el producto con body válido (éxito)', async () => {
             const actualizado = { ...fakeProduct, price: 39999 };
@@ -220,7 +220,7 @@ describe('Router de productos - /api/products', () => {
         });
     });
 
-    // ── DELETE /api/products/:pid ────────────────────────────────────
+    // ── delete /api/products/:pid ────────────────────────────────────
     describe('DELETE /api/products/:pid', () => {
         it('responde 200 y elimina el producto cuando existe (éxito)', async () => {
             const mensaje = `Producto: ${fakeProduct._id} eliminado.`;

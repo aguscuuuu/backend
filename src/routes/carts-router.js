@@ -6,8 +6,8 @@ import {
     addProductToCart,
     removeProductFromCart,
     clearCart,
-    updateCart,              // ← AGREGAR
-    updateProductQuantity    // ← AGREGAR
+    updateCart,              // ← agregar
+    updateProductQuantity    // ← agregar
 } from "../controllers/cart-controller.js";
 
 const router = Router(); // se crea una instancia de router para definir rutas
@@ -25,10 +25,10 @@ router.get("/:cid", getCartById);
 router.post("/:cid/product/:pid", addProductToCart);
 
 //* ruta http que actualiza la cantidad de un producto específico ---------------------------------------------------------------------
-router.put("/:cid/products/:pid", updateProductQuantity); // ← NUEVA (antes de /:cid)
+router.put("/:cid/products/:pid", updateProductQuantity); // ← nueva (antes de /:cid)
 
-//* ruta http que actualiza TODO el carrito con un array de productos -----------------------------------------------------------------
-router.put("/:cid", updateCart); // ← NUEVA
+//* ruta http que actualiza todo el carrito con un array de productos -----------------------------------------------------------------
+router.put("/:cid", updateCart); // ← nueva
 
 //* ruta http que elimina un producto del carrito -------------------------------------------------------------------------------------
 router.delete("/:cid/product/:pid", removeProductFromCart);

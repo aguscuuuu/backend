@@ -104,7 +104,7 @@ export const clearCart = async (req, res) => {
     }
 };
 
-//* actualizar TODO el carrito con un array de productos (NUEVA)
+//* actualizar todo el carrito con un array de productos (nueva)
 export const updateCart = async (req, res) => {
     try {
         const { cid } = req.params;
@@ -123,7 +123,7 @@ export const updateCart = async (req, res) => {
     }
 };
 
-//* actualizar la cantidad de un producto específico (NUEVA)
+//* actualizar la cantidad de un producto específico (nueva)
 export const updateProductQuantity = async (req, res) => {
     try {
         const { cid, pid } = req.params;

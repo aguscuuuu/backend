@@ -2,7 +2,7 @@ import passport from '../config/passport.js';
 import { userManager } from '../managers/user-manager.js';
 import { generateToken, getCookieOptions } from '../utils/jwt.js';
 
-// POST /api/v1/auth/register
+// post /api/v1/auth/register
 export const register = async (req, res, next) => {
     try {
         const user = await userManager.register(req.body);
@@ -17,7 +17,7 @@ export const register = async (req, res, next) => {
     }
 };
 
-// POST /api/v1/auth/login  (Passport Local + JWT)
+// post /api/v1/auth/login  (passport local + jwt)
 export const login = (req, res, next) => {
     passport.authenticate('local', { session: false }, (err, user, info) => {
         if (err) return next(err);
@@ -57,7 +57,7 @@ export const login = (req, res, next) => {
     })(req, res, next);
 };
 
-// GET /api/v1/auth/logout
+// get /api/v1/auth/logout
 export const logout = (req, res, next) => {
     req.session.destroy((err) => {
         if (err) return next(err);
@@ -70,7 +70,7 @@ export const logout = (req, res, next) => {
     });
 };
 
-// GET /api/v1/auth/github/callback  (handler post-OAuth)
+// get /api/v1/auth/github/callback  (handler post-oauth)
 export const githubCallback = (req, res) => {
     const token = generateToken(req.user);
 
@@ -87,7 +87,7 @@ export const githubCallback = (req, res) => {
     res.redirect('/');
 };
 
-// GET /api/v1/session
+// get /api/v1/session
 export const getSession = (req, res) => {
     if (!req.session?.user) {
         return res.status(401).json({
@@ -105,7 +105,7 @@ export const getSession = (req, res) => {
     });
 };
 
-// GET /api/v1/profile  (protegida por JWT)
+// get /api/v1/profile  (protegida por jwt)
 export const getProfile = async (req, res, next) => {
     try {
         const user = await userManager.getById(req.user.userId);
@@ -126,7 +126,7 @@ export const getProfile = async (req, res, next) => {
     }
 };
 
-// GET /api/v1/admin  (protegida por JWT + rol admin)
+// get /api/v1/admin  (protegida por jwt + rol admin)
 export const getAdmin = async (req, res, next) => {
     try {
         const users = await userManager.getUsers();

@@ -9,10 +9,10 @@
     width: calc(100% + 60px);
     border-radius: 0 !important;
 ">
-    <!-- LADO IZQUIERDO -->
+    <!-- lado izquierdo -->
     <div style="display: flex; gap: 10px; align-items: center;">
         {{#if user.isAdmin}}
-            <!-- NAVBAR ADMIN -->
+            <!-- navbar admin -->
             <a href="/" style="
                 color: #ffffff;
                 font-weight: 600;
@@ -24,7 +24,7 @@
                 transition: text-shadow 0.25s ease;
             " onmouseover="this.style.textShadow='0 0 8px rgba(255,255,255,0.6)'" onmouseout="this.style.textShadow='none'">Vertex</a>
         {{else}}
-            <!-- NAVBAR CLIENTES -->
+            <!-- navbar clientes -->
             <a href="/" style="
                 color: #ffffff;
                 font-weight: 600;
@@ -172,11 +172,11 @@
         {{/if}}
     </div>
     
-    <!-- LADO DERECHO -->
+    <!-- lado derecho -->
     <div style="display: flex; gap: 10px; align-items: center;">
         {{#if user}}
             {{#if user.isAdmin}}
-                <!-- ADMIN SESIÓN INICIADA -->
+                <!-- admin sesión iniciada -->
                 <span style="
                     color: #ffffff;
                     font-weight: 500;
@@ -195,7 +195,7 @@
                     transition: all 0.25s ease;
                 " onmouseover="this.style.backgroundColor='#d18900'; this.style.textShadow='0 0 8px rgba(255,255,255,0.4)'" onmouseout="this.style.backgroundColor='#ec9a00'; this.style.textShadow='none'">Cerrar sesión</a>
             {{else}}
-                <!-- CLIENTE SESIÓN INICIADA -->
+                <!-- cliente sesión iniciada -->
                 <button onclick="goToCart()" style="
                     background-color: #275079;
                     color: #e5e7eb;
@@ -238,7 +238,7 @@
                 " onmouseover="this.style.backgroundColor='#d18900'; this.style.textShadow='0 0 8px rgba(255,255,255,0.4)'" onmouseout="this.style.backgroundColor='#ec9a00'; this.style.textShadow='none'">Cerrar sesión</a>
             {{/if}}
         {{else}}
-            <!-- NO HAY SESIÓN INICIADA -->
+            <!-- no hay sesión iniciada -->
             <a href="/login" style="
                 color: #e5e7eb;
                 text-decoration: none;
@@ -266,7 +266,7 @@
 
 {{#unless user.isAdmin}}
 <script>
-    // Cerrar dropdown al hacer click fuera
+    // cerrar dropdown al hacer click fuera
     window.addEventListener('click', function(e) {
         if (!e.target.matches('button') && !e.target.closest('button')) {
             const dropdown = document.getElementById('productDropdown');

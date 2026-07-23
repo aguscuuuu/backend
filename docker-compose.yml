@@ -1,11 +1,11 @@
-# docker-compose para ejecutar la aplicación junto a un MongoDB local.
-# Demostración auto-contenida: no requiere MongoDB Atlas ni un archivo .env.
+# docker-compose para ejecutar la aplicación junto a un mongodb local.
+# demostración auto-contenida: no requiere mongodb atlas ni un archivo .env.
 #
-# Uso:
+# uso:
 #   docker compose up --build         # construye y levanta app + mongo
 #   docker compose down -v            # detiene y borra los volúmenes
 #
-# La app queda en http://localhost:8080 (ej: GET /api/products).
+# la app queda en http://localhost:8080 (ej: get /api/products).
 
 services:
   mongo:
@@ -38,8 +38,8 @@ services:
       MONGO_URL: mongodb://mongo:27017/backend
       SESSION_SECRET: demo_session_secret_cambiar_en_produccion
       JWT_SECRET: demo_jwt_secret_cambiar_en_produccion_min_32_chars
-      # Valores dummy: la estrategia de GitHub se instancia al arrancar y exige
-      # un clientID. No se usan salvo que se pruebe el login con GitHub.
+      # valores dummy: la estrategia de github se instancia al arrancar y exige
+      # un clientid. no se usan salvo que se pruebe el login con github.
       GITHUB_CLIENT_ID: dummy_client_id
       GITHUB_CLIENT_SECRET: dummy_client_secret
       GITHUB_CALLBACK_URL: http://localhost:8080/api/v1/auth/github/callback

@@ -11,7 +11,7 @@ test
 coverage
 .nyc_output
 
-# git y CI
+# git y ci
 .git
 .gitignore
 .github
@@ -29,7 +29,7 @@ docs
 .DS_Store
 Thumbs.db
 
-# el propio Dockerfile no necesita copiarse
+# el propio dockerfile no necesita copiarse
 Dockerfile
 .dockerignore
 *.tmp
