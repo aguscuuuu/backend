@@ -1,9 +1,9 @@
 <h1>Catálogo de productos</h1>
 
-<div style="margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap;">
+<div style="margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
     <div>
         <label style="margin-right: 8px;">Categoría:</label>
-        <select id="categoryFilter" style="padding: 8px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; font-size: 14px">
+        <select id="categoryFilter" class="btn">
             <option value="">Todas</option>
             <option value="Periféricos">Periféricos</option>
             <option value="Monitores">Monitores</option>
@@ -16,7 +16,7 @@
 
     <div>
         <label style="margin-right: 8px;">Ordenar por precio:</label>
-        <select id="sortFilter" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; cursor: pointer; font-size: 14px">
+        <select id="sortFilter" class="btn">
             <option value="">Sin orden</option>
             <option value="asc">Menor a mayor</option>
             <option value="desc">Mayor a menor</option>
@@ -25,7 +25,7 @@
 
     <div>
         <label style="margin-right: 8px;">Disponibilidad:</label>
-        <select id="availabilityFilter" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; cursor: pointer; font-size: 14px">
+        <select id="availabilityFilter" class="btn">
             <option value="">Todos</option>
             <option value="available">Disponibles</option>
             <option value="unavailable">No disponibles</option>
@@ -35,37 +35,47 @@
     <button onclick="applyFilters()" class="btn">Aplicar filtros</button>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-bottom: 30px;">
+<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px;">
     {{#each products}}
-    <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px; display: flex; flex-direction: column;">
+    <div onclick="location.href='/products/{{this._id}}'"
+        style="border: 1px solid #ddd; border-radius: 5px; padding: 14px; display: flex; flex-direction: column; gap: 6px; cursor: pointer;">
         {{#if this.thumbnails.[0]}}
             <img src="{{this.thumbnails.[0]}}" alt="{{this.title}}"
-                style="width: 100%; height: 215px; object-fit: cover; border-radius: 5px; margin-bottom: 12px;">
+                style="width: 100%; aspect-ratio: 1 / 1; object-fit: contain; border-radius: 5px;">
         {{else}}
-            <div style="width: 100%; height: 215px; background: #f2f2f2; border-radius: 5px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.85rem;">
+            <div style="width: 100%; aspect-ratio: 1 / 1; background: #f2f2f2; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.85rem;">
                 Sin imagen
             </div>
         {{/if}}
 
-        <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">{{this.title}}</h3>
-        <p style="color: #666; font-size: 0.9rem; margin-bottom: 3px; min-height: 60px;">{{this.description}}</p>
+        <hr style="border: none; border-top: 1px solid #e8e8e8; margin: 0; width: 100%;">
 
-        <div style="margin-top: auto;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <span style="font-size: 1.5rem; font-weight: 600; color: #0f4881;">{{this.priceFormatted}}</span>
-                <span style="background: {{#if this.status}}#28a745{{else}}#dc3545{{/if}}; color: white; padding: 4px 12px; border-radius: 5px; font-size: 0.75rem; font-weight: 600;">
-                    {{#if this.status}}Disponible{{else}}Agotado{{/if}}
-                </span>
+        <h3 style="margin: 0; color: #333; font-size: 0.85rem; font-weight: 600; line-height: 1.3; min-height: 2.6em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{this.title}}</h3>
+
+        <span style="align-self: flex-start; background: #eef2f7; color: #0b3866; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 600;">{{this.category}}</span>
+
+        <p style="margin: 0; color: #666; font-size: 0.85rem; line-height: 1.3; min-height: 2.6em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{this.description}}</p>
+
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+            {{#if this.oldPriceFormatted}}
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.95rem; color: #999; text-decoration: line-through;">{{this.oldPriceFormatted}}</span>
+                <span style="background: #0b3866; color: #fff; font-size: 0.95rem; font-weight: 700; padding: 1px 6px; border-radius: 10px;">-{{this.discountPercent}}% OFF</span>
             </div>
-
-            <p style="color: #000; font-size: 0.85rem; margin-bottom: 6px;">Stock: {{this.stock}}</p>
-            <p style="color: #000; font-size: 0.85rem; margin-bottom: 15px;">Categoría: {{this.category}}</p>
+            {{/if}}
+            <span style="font-size: 1.5rem; font-weight: 600; color: #000;">{{this.priceFormatted}}</span>
         </div>
 
-        <div style="display: flex; gap: 10px;">
-            <a href="/products/{{this._id}}" class="btn" style="flex: 1; text-align: center; font-size: 12px">Ver detalle</a>
-            <button onclick="addToCart('{{this._id}}')" class="btn btn-secondary" style="flex: 1; font-size: 12px">Agregar</button>
-        </div>
+        <span style="align-self: flex-start; background: {{stockColor this.stock}}; color: white; padding: 4px 12px; border-radius: 5px; font-size: 0.75rem; font-weight: 600;">{{stockLabel this.stock}}</span>
+
+        <button type="button" onclick="event.stopPropagation(); addToCart('{{this._id}}')" class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            Agregar
+        </button>
     </div>
     {{/each}}
 </div>

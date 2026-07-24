@@ -5,11 +5,11 @@ class ProductManager {
     //* obtiene todos los productos con paginación, filtros y ordenamiento
     getAll = async (queryParams = {}) => {
         try {
-            const { 
-                limit = 12, 
-                page = 1, 
-                sort, 
-                query 
+            const {
+                limit = 15,  // multiplo de las 5 columnas -> filas siempre completas
+                page = 1,
+                sort,
+                query
             } = queryParams;
             // construir filtro
             let filter = {};

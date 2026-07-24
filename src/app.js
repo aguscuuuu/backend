@@ -43,6 +43,20 @@ app.use(passport.session());
 app.engine('handlebars', handlebars.engine({
     helpers: {
         multiply: (a, b) => a * b,
+        currentYear: () => new Date().getFullYear(),
+        // texto del cartel de disponibilidad segun stock
+        stockLabel: (stock) => {
+            if (stock <= 0) return 'Agotado';
+            if (stock === 1) return '¡Última unidad!';
+            if (stock < 10) return `¡Últimas ${stock} unidades!`;
+            return 'Disponible';
+        },
+        // color del cartel segun stock
+        stockColor: (stock) => {
+            if (stock <= 0) return '#dc3545';
+            if (stock < 10) return '#ec9a00';
+            return '#28a745';
+        },
     },
 }));
 app.set('view engine', 'handlebars');

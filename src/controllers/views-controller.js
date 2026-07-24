@@ -6,13 +6,20 @@ export const getHomeView = async (req, res, next) => {
     try {
         const result = await productManager.getAll(req.query);
 
-        const productsFormatted = result.payload.map((p) => ({
-            ...p,
-            priceFormatted: formatARS(p.price),
-        }));
+        const productsFormatted = result.payload.map((p) => {
+            const hasDiscount = p.oldPrice && p.oldPrice > p.price;
+            return {
+                ...p,
+                priceFormatted: formatARS(p.price),
+                oldPriceFormatted: hasDiscount ? formatARS(p.oldPrice) : null,
+                discountPercent: hasDiscount
+                    ? Math.round((1 - p.price / p.oldPrice) * 100)
+                    : null,
+            };
+        });
 
         res.render('home', {
-            title: 'Inicio',
+            title: 'Vertex',
             products: productsFormatted,
             page: result.page,
             totalPages: result.totalPages,
@@ -45,6 +52,12 @@ export const getProductDetailView = async (req, res, next) => {
         const product = productDoc.toObject();
 
         product.priceFormatted = formatARS(product.price);
+        product.hasGallery = Array.isArray(product.thumbnails) && product.thumbnails.length > 1;
+        const hasDiscount = product.oldPrice && product.oldPrice > product.price;
+        product.oldPriceFormatted = hasDiscount ? formatARS(product.oldPrice) : null;
+        product.discountPercent = hasDiscount
+            ? Math.round((1 - product.price / product.oldPrice) * 100)
+            : null;
 
         res.render('productDetail', {
             title: product.title,
