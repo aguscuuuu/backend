@@ -166,6 +166,48 @@
     .product-card:hover .product-media-empty {
         transform: scale(1.05);
     }
+
+    /* loader azul mientras carga la imagen del producto */
+    .media-frame {
+        position: relative;
+    }
+
+    .media-loader {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        z-index: 1;
+    }
+
+    .media-loader.hidden {
+        display: none;
+    }
+
+    .media-spinner {
+        width: 34px;
+        height: 34px;
+        border: 2px solid transparent;
+        border-top-color: #0b3866;
+        border-radius: 50%;
+        animation: media-spin 0.7s linear infinite;
+    }
+
+    @keyframes media-spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* fade in de la imagen al terminar de cargar */
+    .media-frame img {
+        opacity: 0;
+        transition: opacity 0.35s ease, transform 0.25s ease;
+    }
+
+    .media-frame img.loaded {
+        opacity: 1;
+    }
 </style>
 </head>
 <body>
@@ -177,7 +219,7 @@
         <div class="footer-content">
             <div class="footer-column">
                 <div class="footer-brand">
-                    <img src="/icon.svg" alt="Logo Vertex" style="height: 28px; width: auto; background: #ffffff; padding: 5px; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                    <img src="/icon.svg" alt="Logo Vertex" style="height: 28px; width: 28px; flex-shrink: 0; background: #ffffff; padding: 5px; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
                     Vertex
                 </div>
                 <p>Tu tienda de tecnología: periféricos, monitores, audio, almacenamiento, muebles y accesorios.</p>

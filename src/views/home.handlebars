@@ -40,8 +40,11 @@
     <div class="product-card" onclick="location.href='/products/{{this._id}}'"
         style="border: 1px solid #ddd; border-radius: 5px; padding: 14px; display: flex; flex-direction: column; gap: 6px; cursor: pointer;">
         {{#if this.thumbnails.[0]}}
-            <div style="width: 100%; aspect-ratio: 1 / 1; border-radius: 5px; overflow: hidden;">
+            <div class="media-frame" style="width: 100%; aspect-ratio: 1 / 1; border-radius: 5px; overflow: hidden;">
+                <div class="media-loader"><span class="media-spinner"></span></div>
                 <img class="product-media product-media-image" src="{{this.thumbnails.[0]}}" alt="{{this.title}}"
+                    onload="this.classList.add('loaded'); this.previousElementSibling.classList.add('hidden')"
+                    onerror="this.classList.add('loaded'); this.previousElementSibling.classList.add('hidden')"
                     style="width: 100%; height: 100%; object-fit: contain; display: block;">
             </div>
         {{else}}
